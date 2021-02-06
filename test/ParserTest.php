@@ -12,6 +12,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserTest extends TestCase {
     public function testParser() {
-        $this->assertTrue(True);
+        $this->assertTrue(False);
     }
 }
