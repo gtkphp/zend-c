@@ -1,0 +1,19 @@
+{
+  "name": "gtkphp/zend-c",
+  "description": "Parse C struct and enum",
+  "license": "GPL-2.0-only",
+  "authors": [
+    {
+      "name": "Sergio d14s",
+      "email": "glash.gnome@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zend\\C\\": "src/"
+    }
+  }
+}
