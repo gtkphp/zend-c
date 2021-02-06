@@ -11,6 +11,10 @@
   "require": {
     "php": ">=7.2"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^7.2",
+    "ircmaxell/php-yacc": "dev-master"
+  },
   "autoload": {
     "psr-4": {
       "Zend\\C\\": "src/"
