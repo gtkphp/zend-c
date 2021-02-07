@@ -23,7 +23,7 @@
 %%
 
 primary_expression
-    : IDENTIFIER            { $$ = Expr\DeclRefExpr[$1, null]; }
+    : IDENTIFIER            { $$ = new Expr\DeclRefExpr($1, null); }
     | constant              { $$ = $1; }
     | string                { $$ = $1; }
     | '(' expression ')'    { $$ = $2; }
@@ -31,9 +31,9 @@ primary_expression
     ;
 
 constant
-    : I_CONSTANT            { $$ = Node\Stmt\ValueStmt\Expr\IntegerLiteral[$1]; } /* includes character_constant */
-    | F_CONSTANT            { $$ = Node\Stmt\ValueStmt\Expr\FloatLiteral[$1]; }
-    | ENUMERATION_CONSTANT  { $$ = Node\Stmt\ValueStmt\Expr\DeclRefExpr[$1, $this->scope->enum($1)]; }  /* after it has been defined as such */
+    : I_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($1); } /* includes character_constant */
+    | F_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\FloatLiteral($1); }
+    | ENUMERATION_CONSTANT  { $$ = new Node\Stmt\ValueStmt\Expr\DeclRefExpr($1, $this->scope->enum($1)); }  /* after it has been defined as such */
     ;
 
 enumeration_constant        /* before it has been defined as such */
@@ -62,12 +62,12 @@ generic_association
 postfix_expression
     : primary_expression                                   { $$ = $1; }
     | postfix_expression '[' expression ']'                { throw new Error('dim fetch not implemented'); }
-    | postfix_expression '(' ')'                           { $$ = Expr\CallExpr[$1, []]; }
-    | postfix_expression '(' argument_expression_list ')'  { $$ = Expr\CallExpr[$1, $3]; }
+    | postfix_expression '(' ')'                           { $$ = new Expr\CallExpr($1, []); }
+    | postfix_expression '(' argument_expression_list ')'  { $$ = new Expr\CallExpr($1, $3); }
     | postfix_expression '.' IDENTIFIER                    { throw new Error('.identifier not implemented'); }
     | postfix_expression PTR_OP IDENTIFIER                 { throw new Error('->identifier not implemented'); }
-    | postfix_expression INC_OP                            { $$ = Expr\UnaryOperator[$2, Expr\UnaryOperator::KIND_POSTINC]; }
-    | postfix_expression DEC_OP                            { $$ = Expr\UnaryOperator[$2, Expr\UnaryOperator::KIND_POSTDEC]; }
+    | postfix_expression INC_OP                            { $$ = new Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_POSTINC); }
+    | postfix_expression DEC_OP                            { $$ = new Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_POSTDEC); }
     | '(' type_name ')' '{' initializer_list '}'           { throw new Error('initializer list no trailing not implemented'); }
     | '(' type_name ')' '{' initializer_list ',' '}'       { throw new Error('initializer list trailing not implemented'); }
     ;
@@ -79,12 +79,12 @@ argument_expression_list
 
 unary_expression
     : postfix_expression                { $$ = $1; }
-    | INC_OP unary_expression           { $$ = Expr\UnaryOperator[$2, Expr\UnaryOperator::KIND_PREINC]; }
-    | DEC_OP unary_expression           { $$ = Expr\UnaryOperator[$2, Expr\UnaryOperator::KIND_PREDEC]; }
-    | unary_operator cast_expression    { $$ = Expr\UnaryOperator[$2, $1]; }
-    | SIZEOF unary_expression           { $$ = Expr\UnaryOperator[$2, Expr\UnaryOperator::KIND_SIZEOF]; }
-    | SIZEOF '(' type_name ')'          { $$ = Expr\UnaryOperator[$3, Expr\UnaryOperator::KIND_SIZEOF]; }
-    | ALIGNOF '(' type_name ')'         { $$ = Expr\UnaryOperator[$3, Expr\UnaryOperator::KIND_ALIGNOF]; }
+    | INC_OP unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_PREINC); }
+    | DEC_OP unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_PREDEC); }
+    | unary_operator cast_expression    { $$ = Expr\UnaryOperator($2, $1); }
+    | SIZEOF unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_SIZEOF); }
+    | SIZEOF '(' type_name ')'          { $$ = Expr\UnaryOperator($3, Expr\UnaryOperator::KIND_SIZEOF); }
+    | ALIGNOF '(' type_name ')'         { $$ = Expr\UnaryOperator($3, Expr\UnaryOperator::KIND_ALIGNOF); }
     ;
 
 unary_operator
@@ -98,75 +98,75 @@ unary_operator
 
 cast_expression
     : unary_expression                      { $$ = $1; }
-    | '(' type_name ')' cast_expression     { $$ = Expr\CastExpr[$4, $2]; }
+    | '(' type_name ')' cast_expression     { $$ = Expr\CastExpr($4, $2); }
     ;
 
 multiplicative_expression
     : cast_expression                                   { $$ = $1; }
-    | multiplicative_expression '*' cast_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_MUL]; }
-    | multiplicative_expression '/' cast_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_DIV]; }
-    | multiplicative_expression '%' cast_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_REM]; }
+    | multiplicative_expression '*' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_MUL); }
+    | multiplicative_expression '/' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_DIV); }
+    | multiplicative_expression '%' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_REM); }
     ;
 
 additive_expression
     : multiplicative_expression                             { $$ = $1; }
-    | additive_expression '+' multiplicative_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_ADD]; }
-    | additive_expression '-' multiplicative_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_SUB]; }
+    | additive_expression '+' multiplicative_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_ADD); }
+    | additive_expression '-' multiplicative_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SUB); }
     ;
 
 shift_expression
     : additive_expression                               { $$ = $1; }
-    | shift_expression LEFT_OP additive_expression      { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_SHL]; }
-    | shift_expression RIGHT_OP additive_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_SHR]; }
+    | shift_expression LEFT_OP additive_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SHL); }
+    | shift_expression RIGHT_OP additive_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SHR); }
     ;
 
 relational_expression
     : shift_expression                                  { $$ = $1; }
-    | relational_expression '<' shift_expression        { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_LT]; }
-    | relational_expression '>' shift_expression        { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_GT]; }
-    | relational_expression LE_OP shift_expression      { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_LE]; }
-    | relational_expression GE_OP shift_expression      { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_GE]; }
+    | relational_expression '<' shift_expression        { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LT); }
+    | relational_expression '>' shift_expression        { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_GT); }
+    | relational_expression LE_OP shift_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LE); }
+    | relational_expression GE_OP shift_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_GE); }
     ;
 
 equality_expression
     : relational_expression                             { $$ = $1; }
-    | equality_expression EQ_OP relational_expression   { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_EQ]; }
-    | equality_expression NE_OP relational_expression   { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_NE]; }
+    | equality_expression EQ_OP relational_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_EQ); }
+    | equality_expression NE_OP relational_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_NE); }
     ;
 
 and_expression
     : equality_expression                       { $$ = $1; }
-    | and_expression '&' equality_expression    { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_BITWISE_AND]; }
+    | and_expression '&' equality_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_AND); }
     ;
 
 exclusive_or_expression
     : and_expression                                { $$ = $1; }
-    | exclusive_or_expression '^' and_expression    { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_BITWISE_XOR]; }
+    | exclusive_or_expression '^' and_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_XOR); }
     ;
 
 inclusive_or_expression
     : exclusive_or_expression                               { $$ = $1; }
-    | inclusive_or_expression '|' exclusive_or_expression   { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_BITWISE_OR]; }
+    | inclusive_or_expression '|' exclusive_or_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_OR); }
     ;
 
 logical_and_expression
     : inclusive_or_expression                                   { $$ = $1; }
-    | logical_and_expression AND_OP inclusive_or_expression     { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_LOGICAL_AND]; }
+    | logical_and_expression AND_OP inclusive_or_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LOGICAL_AND); }
     ;
 
 logical_or_expression
     : logical_and_expression                                { $$ = $1; }
-    | logical_or_expression OR_OP logical_and_expression    { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_LOGICAL_OR]; }
+    | logical_or_expression OR_OP logical_and_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LOGICAL_OR); }
     ;
 
 conditional_expression
     : logical_or_expression                                             { $$ = $1; }
-    | logical_or_expression '?' expression ':' conditional_expression   { $$ = Expr\AbstractConditionalOperator\ConditionalOperator[$1, $3, $5]; }
+    | logical_or_expression '?' expression ':' conditional_expression   { $$ = new Expr\AbstractConditionalOperator\ConditionalOperator($1, $3, $5); }
     ;
 
 assignment_expression
     : conditional_expression                                        { $$ = $1; }
-    | unary_expression assignment_operator assignment_expression    { $$ = Expr\BinaryOperator[$1, $3, $2]; }
+    | unary_expression assignment_operator assignment_expression    { $$ = new Expr\BinaryOperator($1, $3, $2); }
     ;
 
 assignment_operator
@@ -185,7 +185,7 @@ assignment_operator
 
 expression
     : assignment_expression                     { $$ = $1; }
-    | expression ',' assignment_expression      { $$ = Expr\BinaryOperator[$1, $3, Expr\BinaryOperator::KIND_COMMA]; }  
+    | expression ',' assignment_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_COMMA); }
     ;
 
 constant_expression
@@ -193,8 +193,8 @@ constant_expression
     ;
 
 declaration
-    : declaration_specifiers ';'                        { $$ = IR\Declaration[$1[0], $1[1], []]; }
-    | declaration_specifiers init_declarator_list ';'   { $$ = IR\Declaration[$1[0], $1[1], $2]; }
+    : declaration_specifiers ';'                        { $$ = new IR\Declaration($1[0], $1[1], []); }
+    | declaration_specifiers init_declarator_list ';'   { $$ = new IR\Declaration($1[0], $1[1], $2); }
     | static_assert_declaration                         
     ;
 
@@ -217,8 +217,8 @@ init_declarator_list
     ;
 
 init_declarator
-    : declarator '=' initializer                    { $$ = IR\InitDeclarator[$1, $3]; }
-    | declarator                                    { $$ = IR\InitDeclarator[$1, null]; }
+    : declarator '=' initializer                    { $$ = new IR\InitDeclarator($1, $3); }
+    | declarator                                    { $$ = new IR\InitDeclarator($1, null); }
     ; 
 
 storage_class_specifier
@@ -231,30 +231,30 @@ storage_class_specifier
     ;
 
 type_specifier
-    : VOID                          { $$ = Node\Type\BuiltinType[$1]; }
-    | CHAR                          { $$ = Node\Type\BuiltinType[$1]; }
-    | SHORT                         { $$ = Node\Type\BuiltinType[$1]; }
-    | INT                           { $$ = Node\Type\BuiltinType[$1]; }
-    | LONG                          { $$ = Node\Type\BuiltinType[$1]; }
-    | FLOAT                         { $$ = Node\Type\BuiltinType[$1]; }
-    | DOUBLE                        { $$ = Node\Type\BuiltinType[$1]; }
-    | SIGNED                        { $$ = Node\Type\BuiltinType[$1]; }
-    | UNSIGNED                      { $$ = Node\Type\BuiltinType[$1]; }
-    | BOOL                          { $$ = Node\Type\BuiltinType[$1]; }
-    | COMPLEX                       { $$ = Node\Type\BuiltinType[$1]; }
-    | IMAGINARY                     { $$ = Node\Type\BuiltinType[$1]; } /* non-mandated extension */
+    : VOID                          { $$ = new Node\Type\BuiltinType($1); }
+    | CHAR                          { $$ = new Node\Type\BuiltinType($1); }
+    | SHORT                         { $$ = new Node\Type\BuiltinType($1); }
+    | INT                           { $$ = new Node\Type\BuiltinType($1); }
+    | LONG                          { $$ = new Node\Type\BuiltinType($1); }
+    | FLOAT                         { $$ = new Node\Type\BuiltinType($1); }
+    | DOUBLE                        { $$ = new Node\Type\BuiltinType($1); }
+    | SIGNED                        { $$ = new Node\Type\BuiltinType($1); }
+    | UNSIGNED                      { $$ = new Node\Type\BuiltinType($1); }
+    | BOOL                          { $$ = new Node\Type\BuiltinType($1); }
+    | COMPLEX                       { $$ = new Node\Type\BuiltinType($1); }
+    | IMAGINARY                     { $$ = new Node\Type\BuiltinType($1); } /* non-mandated extension */
     | atomic_type_specifier         { $$ = $1; }
-    | struct_or_union_specifier     { $$ = Node\Type\TagType\RecordType[$1]; }
-    | enum_specifier                { $$ = Node\Type\TagType\EnumType[$1]; }
-    | TYPEDEF_NAME                  { $$ = Node\Type\TypedefType[$1]; } /* after it has been defined as such */
+    | struct_or_union_specifier     { $$ = new Node\Type\TagType\RecordType($1); }
+    | enum_specifier                { $$ = new Node\Type\TagType\EnumType($1); }
+    | TYPEDEF_NAME                  { $$ = new Node\Type\TypedefType($1); } /* after it has been defined as such */
     ;
 
 struct_or_union_specifier
-    : struct_or_union '{' struct_declaration_list '}'               { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl[$1, null, $3]; }
-    | struct_or_union IDENTIFIER '{' struct_declaration_list '}'    { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl[$1, $2, $4]; }
-    | struct_or_union IDENTIFIER                                    { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl[$1, $2, null]; }
-    | struct_or_union TYPEDEF_NAME '{' struct_declaration_list '}'    { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl[$1, $2, $4]; }
-    | struct_or_union TYPEDEF_NAME                                    { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl[$1, $2, null]; }
+    : struct_or_union '{' struct_declaration_list '}'               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, null, $3); }
+    | struct_or_union IDENTIFIER '{' struct_declaration_list '}'    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, $4); }
+    | struct_or_union IDENTIFIER                                    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, null); }
+    | struct_or_union TYPEDEF_NAME '{' struct_declaration_list '}'    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, $4); }
+    | struct_or_union TYPEDEF_NAME                                    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, null); }
     ;
 
 struct_or_union
@@ -268,8 +268,8 @@ struct_declaration_list
     ;
 
 struct_declaration
-    : specifier_qualifier_list ';'                          { compileStructField[$1[0], $1[1], null]; } /* for anonymous struct/union */
-    | specifier_qualifier_list struct_declarator_list ';'   { compileStructField[$1[0], $1[1], $2]; }
+    : specifier_qualifier_list ';'                          { compileStructField($1[0], $1[1], null); } /* for anonymous struct/union */
+    | specifier_qualifier_list struct_declarator_list ';'   { compileStructField($1[0], $1[1], $2); }
     | static_assert_declaration                             
     ;
 
@@ -286,17 +286,17 @@ struct_declarator_list
     ;
 
 struct_declarator
-    : ':' constant_expression               { $$ = IR\FieldDeclaration[null, $1]; }
-    | declarator ':' constant_expression    { $$ = IR\FieldDeclaration[$1, $3]; }
-    | declarator                            { $$ = IR\FieldDeclaration[$1, null]; }
+    : ':' constant_expression               { $$ = new IR\FieldDeclaration(null, $1); }
+    | declarator ':' constant_expression    { $$ = new IR\FieldDeclaration($1, $3); }
+    | declarator                            { $$ = new IR\FieldDeclaration($1, null); }
     ;
 
 enum_specifier
-    : ENUM '{' enumerator_list '}'                  { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl[null, $3]; }
-    | ENUM '{' enumerator_list ',' '}'              { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl[null, $3]; }
-    | ENUM IDENTIFIER '{' enumerator_list '}'       { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl[$2, $4]; }
-    | ENUM IDENTIFIER '{' enumerator_list ',' '}'   { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl[$2, $4]; }
-    | ENUM IDENTIFIER                               { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl[$2, null]; }
+    : ENUM '{' enumerator_list '}'                  { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $3); }
+    | ENUM '{' enumerator_list ',' '}'              { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $3); }
+    | ENUM IDENTIFIER '{' enumerator_list '}'       { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, $4); }
+    | ENUM IDENTIFIER '{' enumerator_list ',' '}'   { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, $4); }
+    | ENUM IDENTIFIER                               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, null); }
     ;
 
 enumerator_list
@@ -305,8 +305,8 @@ enumerator_list
     ;
 
 enumerator  /* identifiers must be flagged as ENUMERATION_CONSTANT */
-    : enumeration_constant '=' constant_expression      { $$ = Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl[$1, $3]; $this->scope->enumdef($1, $$); }
-    | enumeration_constant                              { $$ = Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl[$1, null]; $this->scope->enumdef($1, $$); }
+    : enumeration_constant '=' constant_expression      { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($1, $3); $this->scope->enumdef($1, $$); }
+    | enumeration_constant                              { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($1, null); $this->scope->enumdef($1, $$); }
     ;
 
 atomic_type_specifier
@@ -331,32 +331,32 @@ alignment_specifier
     ;
 
 declarator
-    : pointer direct_declarator     { $$ = IR\Declarator[$1, $2]; }
-    | direct_declarator             { $$ = IR\Declarator[null, $1]; }
+    : pointer direct_declarator     { $$ = new IR\Declarator($1, $2); }
+    | direct_declarator             { $$ = new IR\Declarator(null, $1); }
     ;
 
 direct_declarator
-    : IDENTIFIER                                                                    { $$ = IR\DirectDeclarator\Identifier[$1]; }
-    | '(' declarator ')'                                                            { $$ = IR\DirectDeclarator\Declarator[$2]; }
-    | direct_declarator '[' ']'                                                     { $$ = IR\DirectDeclarator\IncompleteArray[$1]; }
-    | direct_declarator '[' '*' ']'                                                 { $$ = IR\DirectDeclarator\IncompleteArray[$1]; }
+    : IDENTIFIER                                                                    { $$ = new IR\DirectDeclarator\Identifier($1); }
+    | '(' declarator ')'                                                            { $$ = new IR\DirectDeclarator\Declarator($2); }
+    | direct_declarator '[' ']'                                                     { $$ = new IR\DirectDeclarator\IncompleteArray($1); }
+    | direct_declarator '[' '*' ']'                                                 { $$ = new IR\DirectDeclarator\IncompleteArray($1); }
     | direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'    { throw new Error('direct_declarator bracket static type_qualifier_list assignment_expression not implemented'); }
     | direct_declarator '[' STATIC assignment_expression ']'                        { throw new Error('direct_declarator bracket static assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list '*' ']'                             { throw new Error('direct_declarator bracket type_qualifier_list star not implemented'); }
     | direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'    { throw new Error('direct_declarator bracket type_qualifier_list static assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list assignment_expression ']'           { throw new Error('direct_declarator bracket type_qualifier_list assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list ']'                                 { throw new Error('direct_declarator bracket type_qualifier_list not implemented'); }
-    | direct_declarator '[' assignment_expression ']'                               { $$ = IR\DirectDeclarator\CompleteArray[$1, $3]; }
-    | direct_declarator '(' parameter_type_list ')'                                 { $$ = IR\DirectDeclarator\Function_[$1, $3[0], $3[1]]; }
-    | direct_declarator '(' ')'                                                     { $$ = IR\DirectDeclarator\Function_[$1, [], false]; }
+    | direct_declarator '[' assignment_expression ']'                               { $$ = new IR\DirectDeclarator\CompleteArray($1, $3); }
+    | direct_declarator '(' parameter_type_list ')'                                 { $$ = new IR\DirectDeclarator\Function_($1, $3[0], $3[1]); }
+    | direct_declarator '(' ')'                                                     { $$ = new IR\DirectDeclarator\Function_($1, [], false); }
     | direct_declarator '(' identifier_list ')'                                     { throw new Error('direct_declarator params identifier list not implemented'); }
     ;
 
 pointer
-    : '*' type_qualifier_list pointer       { $$ = IR\QualifiedPointer[$2, $3]; }
-    | '*' type_qualifier_list               { $$ = IR\QualifiedPointer[$2, null]; }
-    | '*' pointer                           { $$ = IR\QualifiedPointer[0, $2]; }
-    | '*'                                   { $$ = IR\QualifiedPointer[0, null]; }
+    : '*' type_qualifier_list pointer       { $$ = new IR\QualifiedPointer($2, $3); }
+    | '*' type_qualifier_list               { $$ = new IR\QualifiedPointer($2, null); }
+    | '*' pointer                           { $$ = new IR\QualifiedPointer(0, $2); }
+    | '*'                                   { $$ = new IR\QualifiedPointer(0, null); }
     ;
 
 type_qualifier_list
@@ -376,9 +376,9 @@ parameter_list
     ;
 
 parameter_declaration
-    : declaration_specifiers declarator             { compileParamVarDeclaration[$1[0], $1[1], $2]; }
-    | declaration_specifiers abstract_declarator    { compileParamAbstractDeclaration[$1[0], $1[1], $2]; }
-    | declaration_specifiers                        { compileParamAbstractDeclaration[$1[0], $1[1], null]; }
+    : declaration_specifiers declarator             { compileParamVarDeclaration($1[0], $1[1], $2); }
+    | declaration_specifiers abstract_declarator    { compileParamAbstractDeclaration($1[0], $1[1], $2); }
+    | declaration_specifiers                        { compileParamAbstractDeclaration($1[0], $1[1], null); }
     ;
 
 identifier_list
@@ -387,19 +387,19 @@ identifier_list
     ;
 
 type_name
-    : specifier_qualifier_list abstract_declarator  { compileTypeReference[$1[0], $1[1], $2]; }
-    | specifier_qualifier_list                      { compileTypeReference[$1[0], $1[1], null]; }
+    : specifier_qualifier_list abstract_declarator  { compileTypeReference($1[0], $1[1], $2); }
+    | specifier_qualifier_list                      { compileTypeReference($1[0], $1[1], null); }
     ;
 
 abstract_declarator
-    : pointer direct_abstract_declarator    { $$ = IR\AbstractDeclarator[$1, $2]; }
-    | pointer                               { $$ = IR\AbstractDeclarator[$1, null]; }
-    | direct_abstract_declarator            { $$ = IR\AbstractDeclarator[null, $1]; }
+    : pointer direct_abstract_declarator    { $$ = new IR\AbstractDeclarator($1, $2); }
+    | pointer                               { $$ = new IR\AbstractDeclarator($1, null); }
+    | direct_abstract_declarator            { $$ = new IR\AbstractDeclarator(null, $1); }
     ;
 
 direct_abstract_declarator
-    : '(' abstract_declarator ')'                                                           { $$ = IR\DirectAbstractDeclarator\AbstractDeclarator[$1]; }
-    | '[' ']'                                                                               { $$ = IR\DirectAbstractDeclarator\IncompleteArray[]; }
+    : '(' abstract_declarator ')'                                                           { $$ = new IR\DirectAbstractDeclarator\AbstractDeclarator($1); }
+    | '[' ']'                                                                               { $$ = new IR\DirectAbstractDeclarator\IncompleteArray(); }
     | '[' '*' ']'                                                                           { throw new Error('direct_abstract_declarator bracket star not implemented'); }
     | '[' STATIC type_qualifier_list assignment_expression ']'                              { throw new Error('direct_abstract_declarator bracket static type qualifier list assignment not implemented'); }
     | '[' STATIC assignment_expression ']'                                                  { throw new Error('direct_abstract_declarator bracket static assignment not implemented'); }
@@ -468,8 +468,8 @@ labeled_statement
     ;
 
 compound_statement
-    : '{' '}'                   { $$ = Node\Stmt\CompoundStmt[[]]; }
-    | '{'  block_item_list '}'  { $$ = Node\Stmt\CompoundStmt[$2]; }
+    : '{' '}'                   { $$ = new Node\Stmt\CompoundStmt([]); }
+    | '{'  block_item_list '}'  { $$ = new Node\Stmt\CompoundStmt($2); }
     ;
 
 block_item_list
@@ -506,23 +506,23 @@ jump_statement
     : GOTO IDENTIFIER ';'       { throw new Error('goto identifier not implemented'); }
     | CONTINUE ';'              { throw new Error('continue not implemented'); }
     | BREAK ';'                 { throw new Error('break not implemented'); }
-    | RETURN ';'                { $$ = Node\Stmt\ReturnStmt[null]; }
-    | RETURN expression ';'     { $$ = Node\Stmt\ReturnStmt[$2]; }
+    | RETURN ';'                { $$ = new Node\Stmt\ReturnStmt(null); }
+    | RETURN expression ';'     { $$ = new Node\Stmt\ReturnStmt($2); }
     ;
 
 translation_unit
-    : external_declaration                      { $$ = Node\TranslationUnitDecl[$1]; }
+    : external_declaration                      { $$ = new Node\TranslationUnitDecl($1); }
     | translation_unit external_declaration     { $$ = $1; $$->addDecl(...$2); }
     ;
 
 external_declaration
     : function_definition   { $$ = $1; }
-    | declaration           { compileExternalDeclaration[$1]; }
+    | declaration           { compileExternalDeclaration($1); }
     ;
 
 function_definition
-    : declaration_specifiers declarator declaration_list compound_statement     { compileFunction[$1[0], $1[1], $2, $3, $4]; }
-    | declaration_specifiers declarator compound_statement                      { compileFunction[$1[0], $1[1], $2, [], $3]; }
+    : declaration_specifiers declarator declaration_list compound_statement     { compileFunction($1[0], $1[1], $2, $3, $4); }
+    | declaration_specifiers declarator compound_statement                      { compileFunction($1[0], $1[1], $2, [], $3); }
     ;
 
 declaration_list

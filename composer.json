@@ -17,7 +17,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Zend\\C\\": "src/"
+      "Zend\\C\\": "src/",
+      "Zend\\C\\Engine\\": "lib/"
     }
   }
 }

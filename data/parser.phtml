@@ -5,9 +5,11 @@ $meta #
 #semval(%n) $stackPos-(%l-%n)
 #semval(%n,%t) $stackPos-(%l-%n)
 
-namespace Zend\C;
+namespace Zend\C\Engine;
 
 use Zend\C\Node\Stmt\ValueStmt\Expr;
+
+use Zend\C\Engine\ParserAbstract;
 
 #include;
 
@@ -89,7 +91,7 @@ class Parser extends ParserAbstract
             },
 #noact
             %n => function ($stackPos) {
-            $this->semValue = $this->semStack[$stackPos];
+            $this->semValue = $this->semStack($stackPos);
         },
 #endreduce
         ];
