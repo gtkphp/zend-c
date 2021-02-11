@@ -33,6 +33,14 @@ class Context {
         $this->locateGCCHeaderPaths();
         $this->scope = new Scope;
     }
+    public function addSearchPath(string $path) {
+        $directory = realpath($path);
+        if ($directory) {
+            $this->headerSearchPaths[] = $directory;
+        } else {
+            echo 'No such directory : "'.$path.'"'.PHP_EOL;
+        }
+    }
 
     private function locateGCCHeaderPaths() {
         if (is_dir('/usr/lib/gcc/x86_64-linux-gnu/')) {

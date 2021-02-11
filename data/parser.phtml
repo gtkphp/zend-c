@@ -7,7 +7,9 @@ $meta #
 
 namespace Zend\C\Engine;
 
-use Zend\C\Node\Stmt\ValueStmt\Expr;
+use Zend\C\Engine\Node\Stmt\ValueStmt\Expr;
+use Zend\C\Engine\Node;
+use Zend\C\Engine\IR;
 
 use Zend\C\Engine\ParserAbstract;
 
@@ -87,11 +89,11 @@ class Parser extends ParserAbstract
         $this->reduceCallbacks = [
 #reduce
             %n => function ($stackPos) {
-            %b
+               %b
             },
 #noact
             %n => function ($stackPos) {
-            $this->semValue = $this->semStack($stackPos);
+                $this->semValue = $this->semStack[$stackPos];
         },
 #endreduce
         ];

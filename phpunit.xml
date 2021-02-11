@@ -11,7 +11,7 @@
          bootstrap="./vendor/autoload.php">
     <testsuites>
         <testsuite name="Zend-C Test Suite">
-            <directory suffix=".php">./test</directory>
+            <directory suffix="Test.php">./test/</directory>
         </testsuite>
     </testsuites>
 

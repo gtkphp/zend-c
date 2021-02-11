@@ -1,4 +1,4 @@
-typedef enum
+typedef enum _GBookmarkFileError
 {
   G_BOOKMARK_FILE_ERROR_INVALID_URI,
   G_BOOKMARK_FILE_ERROR_INVALID_VALUE,

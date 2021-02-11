@@ -23,21 +23,21 @@
 %%
 
 primary_expression
-    : IDENTIFIER            { $$ = new Expr\DeclRefExpr($1, null); }
-    | constant              { $$ = $1; }
-    | string                { $$ = $1; }
-    | '(' expression ')'    { $$ = $2; }
-    | generic_selection     { $$ = $1; }
+    : IDENTIFIER            { $$ = new Expr\DeclRefExpr($this->semStack[$1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | constant              { $$ = $this->semStack[$1]; }
+    | string                { $$ = $this->semStack[$1]; }
+    | '(' expression ')'    { $$ = $this->semStack[$2]; }
+    | generic_selection     { $$ = $this->semStack[$1]; }
     ;
 
 constant
-    : I_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($1); } /* includes character_constant */
-    | F_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\FloatLiteral($1); }
-    | ENUMERATION_CONSTANT  { $$ = new Node\Stmt\ValueStmt\Expr\DeclRefExpr($1, $this->scope->enum($1)); }  /* after it has been defined as such */
+    : I_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); } /* includes character_constant */
+    | F_CONSTANT            { $$ = new Node\Stmt\ValueStmt\Expr\FloatLiteral($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ENUMERATION_CONSTANT  { $$ = new Node\Stmt\ValueStmt\Expr\DeclRefExpr($this->semStack[$1], $this->scope->enum($this->semStack[$1]), $this->startAttributeStack[$1] + $this->endAttributes); }  /* after it has been defined as such */
     ;
 
 enumeration_constant        /* before it has been defined as such */
-    : IDENTIFIER            { $$ = $1; }
+    : IDENTIFIER            { $$ = $this->semStack[$1]; }
     ;
 
 string
@@ -50,8 +50,8 @@ generic_selection
     ;
 
 generic_assoc_list
-    : generic_association                           { init($1); }
-    | generic_assoc_list ',' generic_association    { push($1, $3); }
+    : generic_association                           { $$ = array($this->semStack[$1]); }
+    | generic_assoc_list ',' generic_association    { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 generic_association
@@ -60,31 +60,31 @@ generic_association
     ;
 
 postfix_expression
-    : primary_expression                                   { $$ = $1; }
+    : primary_expression                                   { $$ = $this->semStack[$1]; }
     | postfix_expression '[' expression ']'                { throw new Error('dim fetch not implemented'); }
-    | postfix_expression '(' ')'                           { $$ = new Expr\CallExpr($1, []); }
-    | postfix_expression '(' argument_expression_list ')'  { $$ = new Expr\CallExpr($1, $3); }
+    | postfix_expression '(' ')'                           { $$ = new Expr\CallExpr($this->semStack[$1], [], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | postfix_expression '(' argument_expression_list ')'  { $$ = new Expr\CallExpr($this->semStack[$1], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
     | postfix_expression '.' IDENTIFIER                    { throw new Error('.identifier not implemented'); }
     | postfix_expression PTR_OP IDENTIFIER                 { throw new Error('->identifier not implemented'); }
-    | postfix_expression INC_OP                            { $$ = new Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_POSTINC); }
-    | postfix_expression DEC_OP                            { $$ = new Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_POSTDEC); }
+    | postfix_expression INC_OP                            { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_POSTINC, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | postfix_expression DEC_OP                            { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_POSTDEC, $this->startAttributeStack[$1] + $this->endAttributes); }
     | '(' type_name ')' '{' initializer_list '}'           { throw new Error('initializer list no trailing not implemented'); }
     | '(' type_name ')' '{' initializer_list ',' '}'       { throw new Error('initializer list trailing not implemented'); }
     ;
 
 argument_expression_list
-    : assignment_expression                                { init($1); }
-    | argument_expression_list ',' assignment_expression   { push($1, $3); }
+    : assignment_expression                                { $$ = array($this->semStack[$1]); }
+    | argument_expression_list ',' assignment_expression   { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 unary_expression
-    : postfix_expression                { $$ = $1; }
-    | INC_OP unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_PREINC); }
-    | DEC_OP unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_PREDEC); }
-    | unary_operator cast_expression    { $$ = Expr\UnaryOperator($2, $1); }
-    | SIZEOF unary_expression           { $$ = Expr\UnaryOperator($2, Expr\UnaryOperator::KIND_SIZEOF); }
-    | SIZEOF '(' type_name ')'          { $$ = Expr\UnaryOperator($3, Expr\UnaryOperator::KIND_SIZEOF); }
-    | ALIGNOF '(' type_name ')'         { $$ = Expr\UnaryOperator($3, Expr\UnaryOperator::KIND_ALIGNOF); }
+    : postfix_expression                { $$ = $this->semStack[$1]; }
+    | INC_OP unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_PREINC, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | DEC_OP unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_PREDEC, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | unary_operator cast_expression    { $$ = new Expr\UnaryOperator($this->semStack[$2], $this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | SIZEOF unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | SIZEOF '(' type_name ')'          { $$ = new Expr\UnaryOperator($this->semStack[$3], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ALIGNOF '(' type_name ')'         { $$ = new Expr\UnaryOperator($this->semStack[$3], Expr\UnaryOperator::KIND_ALIGNOF, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 unary_operator
@@ -97,76 +97,76 @@ unary_operator
     ;
 
 cast_expression
-    : unary_expression                      { $$ = $1; }
-    | '(' type_name ')' cast_expression     { $$ = Expr\CastExpr($4, $2); }
+    : unary_expression                      { $$ = $this->semStack[$1]; }
+    | '(' type_name ')' cast_expression     { $$ = new Expr\CastExpr($this->semStack[$4], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 multiplicative_expression
-    : cast_expression                                   { $$ = $1; }
-    | multiplicative_expression '*' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_MUL); }
-    | multiplicative_expression '/' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_DIV); }
-    | multiplicative_expression '%' cast_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_REM); }
+    : cast_expression                                   { $$ = $this->semStack[$1]; }
+    | multiplicative_expression '*' cast_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_MUL, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | multiplicative_expression '/' cast_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_DIV, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | multiplicative_expression '%' cast_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_REM, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 additive_expression
-    : multiplicative_expression                             { $$ = $1; }
-    | additive_expression '+' multiplicative_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_ADD); }
-    | additive_expression '-' multiplicative_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SUB); }
+    : multiplicative_expression                             { $$ = $this->semStack[$1]; }
+    | additive_expression '+' multiplicative_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_ADD, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | additive_expression '-' multiplicative_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_SUB, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 shift_expression
-    : additive_expression                               { $$ = $1; }
-    | shift_expression LEFT_OP additive_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SHL); }
-    | shift_expression RIGHT_OP additive_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_SHR); }
+    : additive_expression                               { $$ = $this->semStack[$1]; }
+    | shift_expression LEFT_OP additive_expression      { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_SHL, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | shift_expression RIGHT_OP additive_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_SHR, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 relational_expression
-    : shift_expression                                  { $$ = $1; }
-    | relational_expression '<' shift_expression        { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LT); }
-    | relational_expression '>' shift_expression        { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_GT); }
-    | relational_expression LE_OP shift_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LE); }
-    | relational_expression GE_OP shift_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_GE); }
+    : shift_expression                                  { $$ = $this->semStack[$1]; }
+    | relational_expression '<' shift_expression        { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_LT, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | relational_expression '>' shift_expression        { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_GT, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | relational_expression LE_OP shift_expression      { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_LE, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | relational_expression GE_OP shift_expression      { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_GE, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 equality_expression
-    : relational_expression                             { $$ = $1; }
-    | equality_expression EQ_OP relational_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_EQ); }
-    | equality_expression NE_OP relational_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_NE); }
+    : relational_expression                             { $$ = $this->semStack[$1]; }
+    | equality_expression EQ_OP relational_expression   { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_EQ, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | equality_expression NE_OP relational_expression   { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_NE, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 and_expression
-    : equality_expression                       { $$ = $1; }
-    | and_expression '&' equality_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_AND); }
+    : equality_expression                       { $$ = $this->semStack[$1]; }
+    | and_expression '&' equality_expression    { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_BITWISE_AND, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 exclusive_or_expression
-    : and_expression                                { $$ = $1; }
-    | exclusive_or_expression '^' and_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_XOR); }
+    : and_expression                                { $$ = $this->semStack[$1]; }
+    | exclusive_or_expression '^' and_expression    { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_BITWISE_XOR, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 inclusive_or_expression
-    : exclusive_or_expression                               { $$ = $1; }
-    | inclusive_or_expression '|' exclusive_or_expression   { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_BITWISE_OR); }
+    : exclusive_or_expression                               { $$ = $this->semStack[$1]; }
+    | inclusive_or_expression '|' exclusive_or_expression   { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_BITWISE_OR, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 logical_and_expression
-    : inclusive_or_expression                                   { $$ = $1; }
-    | logical_and_expression AND_OP inclusive_or_expression     { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LOGICAL_AND); }
+    : inclusive_or_expression                                   { $$ = $this->semStack[$1]; }
+    | logical_and_expression AND_OP inclusive_or_expression     { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_LOGICAL_AND, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 logical_or_expression
-    : logical_and_expression                                { $$ = $1; }
-    | logical_or_expression OR_OP logical_and_expression    { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_LOGICAL_OR); }
+    : logical_and_expression                                { $$ = $this->semStack[$1]; }
+    | logical_or_expression OR_OP logical_and_expression    { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_LOGICAL_OR, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 conditional_expression
-    : logical_or_expression                                             { $$ = $1; }
-    | logical_or_expression '?' expression ':' conditional_expression   { $$ = new Expr\AbstractConditionalOperator\ConditionalOperator($1, $3, $5); }
+    : logical_or_expression                                             { $$ = $this->semStack[$1]; }
+    | logical_or_expression '?' expression ':' conditional_expression   { $$ = new Expr\AbstractConditionalOperator\ConditionalOperator($this->semStack[$1], $this->semStack[$3], $this->semStack[$5], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 assignment_expression
-    : conditional_expression                                        { $$ = $1; }
-    | unary_expression assignment_operator assignment_expression    { $$ = new Expr\BinaryOperator($1, $3, $2); }
+    : conditional_expression                                        { $$ = $this->semStack[$1]; }
+    | unary_expression assignment_operator assignment_expression    { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 assignment_operator
@@ -184,41 +184,41 @@ assignment_operator
     ;
 
 expression
-    : assignment_expression                     { $$ = $1; }
-    | expression ',' assignment_expression      { $$ = new Expr\BinaryOperator($1, $3, Expr\BinaryOperator::KIND_COMMA); }
+    : assignment_expression                     { $$ = $this->semStack[$1]; }
+    | expression ',' assignment_expression      { $$ = new Expr\BinaryOperator($this->semStack[$1], $this->semStack[$3], Expr\BinaryOperator::KIND_COMMA, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 constant_expression
-    : conditional_expression    { $$ = $1; }  /* with constraints */
+    : conditional_expression    { $$ = $this->semStack[$1]; }  /* with constraints */
     ;
 
 declaration
-    : declaration_specifiers ';'                        { $$ = new IR\Declaration($1[0], $1[1], []); }
-    | declaration_specifiers init_declarator_list ';'   { $$ = new IR\Declaration($1[0], $1[1], $2); }
+    : declaration_specifiers ';'                        { $$ = new IR\Declaration($this->semStack[$1][0], $this->semStack[$1][1], [], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declaration_specifiers init_declarator_list ';'   { $$ = new IR\Declaration($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     | static_assert_declaration                         
     ;
 
 declaration_specifiers
-    : storage_class_specifier declaration_specifiers    { $$ = $2; $$[0] |= $1; }
-    | storage_class_specifier                           { $$ = [$1, []]; }
-    | type_specifier declaration_specifiers             { $$ = $2; array_unshift($$[1], $1); }
-    | type_specifier                                    { $$ = [0, [$1]]; }
-    | type_qualifier declaration_specifiers             { $$ = $2; $$[0] |= $1; }
-    | type_qualifier                                    { $$ = [$1, []]; }
-    | function_specifier declaration_specifiers         { $$ = $2; $$[0] |= $1; }
-    | function_specifier                                { $$ = [$1, []]; }
-    | alignment_specifier declaration_specifiers        { $$ = $2; $$[0] |= $1; }
-    | alignment_specifier                               { $$ = [$1, []]; }
+    : storage_class_specifier declaration_specifiers    { $$ = $this->semStack[$2]; $$[0] |= $this->semStack[$1]; }
+    | storage_class_specifier                           { $$ = [$this->semStack[$1], []]; }
+    | type_specifier declaration_specifiers             { $$ = $this->semStack[$2]; array_unshift($$[1], $this->semStack[$1]); }
+    | type_specifier                                    { $$ = [0, [$this->semStack[$1]]]; }
+    | type_qualifier declaration_specifiers             { $$ = $this->semStack[$2]; $$[0] |= $this->semStack[$1]; }
+    | type_qualifier                                    { $$ = [$this->semStack[$1], []]; }
+    | function_specifier declaration_specifiers         { $$ = $this->semStack[$2]; $$[0] |= $this->semStack[$1]; }
+    | function_specifier                                { $$ = [$this->semStack[$1], []]; }
+    | alignment_specifier declaration_specifiers        { $$ = $this->semStack[$2]; $$[0] |= $this->semStack[$1]; }
+    | alignment_specifier                               { $$ = [$this->semStack[$1], []]; }
     ;
 
 init_declarator_list
-    : init_declarator                               { init($1); }
-    | init_declarator_list ',' init_declarator      { push($1, $3); }
+    : init_declarator                               { $$ = array($this->semStack[$1]); }
+    | init_declarator_list ',' init_declarator      { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 init_declarator
-    : declarator '=' initializer                    { $$ = new IR\InitDeclarator($1, $3); }
-    | declarator                                    { $$ = new IR\InitDeclarator($1, null); }
+    : declarator '=' initializer                    { $$ = new IR\InitDeclarator($this->semStack[$1], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declarator                                    { $$ = new IR\InitDeclarator($this->semStack[$1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ; 
 
 storage_class_specifier
@@ -231,31 +231,36 @@ storage_class_specifier
     ;
 
 type_specifier
-    : VOID                          { $$ = new Node\Type\BuiltinType($1); }
-    | CHAR                          { $$ = new Node\Type\BuiltinType($1); }
-    | SHORT                         { $$ = new Node\Type\BuiltinType($1); }
-    | INT                           { $$ = new Node\Type\BuiltinType($1); }
-    | LONG                          { $$ = new Node\Type\BuiltinType($1); }
-    | FLOAT                         { $$ = new Node\Type\BuiltinType($1); }
-    | DOUBLE                        { $$ = new Node\Type\BuiltinType($1); }
-    | SIGNED                        { $$ = new Node\Type\BuiltinType($1); }
-    | UNSIGNED                      { $$ = new Node\Type\BuiltinType($1); }
-    | BOOL                          { $$ = new Node\Type\BuiltinType($1); }
-    | COMPLEX                       { $$ = new Node\Type\BuiltinType($1); }
-    | IMAGINARY                     { $$ = new Node\Type\BuiltinType($1); } /* non-mandated extension */
-    | atomic_type_specifier         { $$ = $1; }
-    | struct_or_union_specifier     { $$ = new Node\Type\TagType\RecordType($1); }
-    | enum_specifier                { $$ = new Node\Type\TagType\EnumType($1); }
-    | TYPEDEF_NAME                  { $$ = new Node\Type\TypedefType($1); } /* after it has been defined as such */
+    : VOID                          { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | CHAR                          { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | SHORT                         { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | INT                           { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | LONG                          { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | FLOAT                         { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | DOUBLE                        { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | SIGNED                        { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | UNSIGNED                      { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | BOOL                          { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | COMPLEX                       { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | IMAGINARY                     { $$ = new Node\Type\BuiltinType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); } /* non-mandated extension */
+    | atomic_type_specifier         { $$ = $this->semStack[$1]; }
+    | struct_or_union_specifier     { $$ = new Node\Type\TagType\RecordType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | enum_specifier                { $$ = new Node\Type\TagType\EnumType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | TYPEDEF_NAME                  { $$ = new Node\Type\TypedefType($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); } /* after it has been defined as such */
     ;
 
 struct_or_union_specifier
-    : struct_or_union '{' struct_declaration_list '}'               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, null, $3); }
-    | struct_or_union IDENTIFIER '{' struct_declaration_list '}'    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, $4); }
-    | struct_or_union IDENTIFIER                                    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, null); }
-    | struct_or_union TYPEDEF_NAME '{' struct_declaration_list '}'    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, $4); }
-    | struct_or_union TYPEDEF_NAME                                    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($1, $2, null); }
+    : struct_or_union '{' struct_declaration_list '}'               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$1], null, $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | struct_or_union IDENTIFIER '{' struct_declaration_list '}'    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$1], $this->semStack[$2], $this->semStack[$4], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | struct_or_union IDENTIFIER                                    { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$1], $this->semStack[$2], null, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | struct_or_union TYPEDEF_NAME '{' struct_declaration_list '}'  { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$1], $this->semStack[$2], $this->semStack[$4], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | struct_or_union TYPEDEF_NAME                                  { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$1], $this->semStack[$2], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
+
+
+
+
+
 
 struct_or_union
     : STRUCT        { $$ = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_STRUCT; }
@@ -263,50 +268,50 @@ struct_or_union
     ;
 
 struct_declaration_list
-    : struct_declaration                            { $$ = $1; }
-    | struct_declaration_list struct_declaration    { $$ = array_merge($1, $2); }
+    : struct_declaration                            { $$ = $this->semStack[$1]; }
+    | struct_declaration_list struct_declaration    { $$ = array_merge($this->semStack[$1], $this->semStack[$2]); }
     ;
 
 struct_declaration
-    : specifier_qualifier_list ';'                          { compileStructField($1[0], $1[1], null); } /* for anonymous struct/union */
-    | specifier_qualifier_list struct_declarator_list ';'   { compileStructField($1[0], $1[1], $2); }
+    : specifier_qualifier_list ';'                          { $$ = $this->compiler->compileStructField($this->semStack[$1][0], $this->semStack[$1][1], null, $this->startAttributeStack[$1] + $this->endAttributes); } /* for anonymous struct/union */
+    | specifier_qualifier_list struct_declarator_list ';'   { $$ = $this->compiler->compileStructField($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     | static_assert_declaration                             
     ;
 
 specifier_qualifier_list                        
-    : type_specifier specifier_qualifier_list           { $$ = $2; array_unshift($$[1], $1); }
-    | type_specifier                                    { $$ = [0, [$1]]; }
-    | type_qualifier specifier_qualifier_list           { $$ = $2; $$[0] |= $1; }
-    | type_qualifier                                    { $$ = [$1, []]; }                            
+    : type_specifier specifier_qualifier_list           { $$ = $this->semStack[$2]; array_unshift($this->semValue[1], $this->semStack[$1]); }
+    | type_specifier                                    { $$ = [0, [$this->semStack[$1]]]; }
+    | type_qualifier specifier_qualifier_list           { $$ = $this->semStack[$2]; $$[0] |= $this->semStack[$1]; }
+    | type_qualifier                                    { $$ = [$this->semStack[$1], []]; }
     ;
 
 struct_declarator_list
-    : struct_declarator                                 { init($1); }
-    | struct_declarator_list ',' struct_declarator      { push($1, $3); }
+    : struct_declarator                                 { $$ = array($this->semStack[$1]); }
+    | struct_declarator_list ',' struct_declarator      { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 struct_declarator
-    : ':' constant_expression               { $$ = new IR\FieldDeclaration(null, $1); }
-    | declarator ':' constant_expression    { $$ = new IR\FieldDeclaration($1, $3); }
-    | declarator                            { $$ = new IR\FieldDeclaration($1, null); }
+    : ':' constant_expression               { $$ = new IR\FieldDeclaration(null, $this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declarator ':' constant_expression    { $$ = new IR\FieldDeclaration($this->semStack[$1], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declarator                            { $$ = new IR\FieldDeclaration($this->semStack[$1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 enum_specifier
-    : ENUM '{' enumerator_list '}'                  { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $3); }
-    | ENUM '{' enumerator_list ',' '}'              { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $3); }
-    | ENUM IDENTIFIER '{' enumerator_list '}'       { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, $4); }
-    | ENUM IDENTIFIER '{' enumerator_list ',' '}'   { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, $4); }
-    | ENUM IDENTIFIER                               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($2, null); }
+    : ENUM '{' enumerator_list '}'                  { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ENUM '{' enumerator_list ',' '}'              { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ENUM IDENTIFIER '{' enumerator_list '}'       { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$2], $this->semStack[$4], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ENUM IDENTIFIER '{' enumerator_list ',' '}'   { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$2], $this->semStack[$4], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | ENUM IDENTIFIER                               { $$ = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$2], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 enumerator_list
-    : enumerator                        { init($1); }
-    | enumerator_list ',' enumerator    { push($1, $3); }
+    : enumerator                        { $$ = array($this->semStack[$1]); }
+    | enumerator_list ',' enumerator    { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 enumerator  /* identifiers must be flagged as ENUMERATION_CONSTANT */
-    : enumeration_constant '=' constant_expression      { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($1, $3); $this->scope->enumdef($1, $$); }
-    | enumeration_constant                              { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($1, null); $this->scope->enumdef($1, $$); }
+    : enumeration_constant '=' constant_expression      { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$1], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); $this->scope->enumdef($this->semStack[$1], $this->semValue); }
+    | enumeration_constant                              { $$ = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$1], null, $this->startAttributeStack[$1] + $this->endAttributes); $this->scope->enumdef($this->semStack[$1], $this->semValue); }
     ;
 
 atomic_type_specifier
@@ -331,54 +336,53 @@ alignment_specifier
     ;
 
 declarator
-    : pointer direct_declarator     { $$ = new IR\Declarator($1, $2); }
-    | direct_declarator             { $$ = new IR\Declarator(null, $1); }
+    : pointer direct_declarator     { $$ = new IR\Declarator($this->semStack[$1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_declarator             { $$ = new IR\Declarator(null, $this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 direct_declarator
-    : IDENTIFIER                                                                    { $$ = new IR\DirectDeclarator\Identifier($1); }
-    | '(' declarator ')'                                                            { $$ = new IR\DirectDeclarator\Declarator($2); }
-    | direct_declarator '[' ']'                                                     { $$ = new IR\DirectDeclarator\IncompleteArray($1); }
-    | direct_declarator '[' '*' ']'                                                 { $$ = new IR\DirectDeclarator\IncompleteArray($1); }
+    : IDENTIFIER                                                                    { $$ = new IR\DirectDeclarator\Identifier($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '(' declarator ')'                                                            { $$ = new IR\DirectDeclarator\Declarator($this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_declarator '[' ']'                                                     { $$ = new IR\DirectDeclarator\IncompleteArray($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_declarator '[' '*' ']'                                                 { $$ = new IR\DirectDeclarator\IncompleteArray($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
     | direct_declarator '[' STATIC type_qualifier_list assignment_expression ']'    { throw new Error('direct_declarator bracket static type_qualifier_list assignment_expression not implemented'); }
     | direct_declarator '[' STATIC assignment_expression ']'                        { throw new Error('direct_declarator bracket static assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list '*' ']'                             { throw new Error('direct_declarator bracket type_qualifier_list star not implemented'); }
     | direct_declarator '[' type_qualifier_list STATIC assignment_expression ']'    { throw new Error('direct_declarator bracket type_qualifier_list static assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list assignment_expression ']'           { throw new Error('direct_declarator bracket type_qualifier_list assignment_expression not implemented'); }
     | direct_declarator '[' type_qualifier_list ']'                                 { throw new Error('direct_declarator bracket type_qualifier_list not implemented'); }
-    | direct_declarator '[' assignment_expression ']'                               { $$ = new IR\DirectDeclarator\CompleteArray($1, $3); }
-    | direct_declarator '(' parameter_type_list ')'                                 { $$ = new IR\DirectDeclarator\Function_($1, $3[0], $3[1]); }
-    | direct_declarator '(' ')'                                                     { $$ = new IR\DirectDeclarator\Function_($1, [], false); }
+    | direct_declarator '[' assignment_expression ']'                               { $$ = new IR\DirectDeclarator\CompleteArray($this->semStack[$1], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_declarator '(' parameter_type_list ')'                                 { $$ = new IR\DirectDeclarator\Function_($this->semStack[$1], $this->semStack[$3][0], $this->semStack[$3][1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_declarator '(' ')'                                                     { $$ = new IR\DirectDeclarator\Function_($this->semStack[$1], [], false, $this->startAttributeStack[$1] + $this->endAttributes); }
     | direct_declarator '(' identifier_list ')'                                     { throw new Error('direct_declarator params identifier list not implemented'); }
     ;
 
 pointer
-    : '*' type_qualifier_list pointer       { $$ = new IR\QualifiedPointer($2, $3); }
-    | '*' type_qualifier_list               { $$ = new IR\QualifiedPointer($2, null); }
-    | '*' pointer                           { $$ = new IR\QualifiedPointer(0, $2); }
-    | '*'                                   { $$ = new IR\QualifiedPointer(0, null); }
+    : '*' type_qualifier_list pointer       { $$ = new IR\QualifiedPointer($this->semStack[$2], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '*' type_qualifier_list               { $$ = new IR\QualifiedPointer($this->semStack[$2], null, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '*' pointer                           { $$ = new IR\QualifiedPointer(0, $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '*'                                   { $$ = new IR\QualifiedPointer(0, null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 type_qualifier_list
-    : type_qualifier                        { $$ = $1; }
-    | type_qualifier_list type_qualifier    { $$ = $1 | $2; }
+    : type_qualifier                        { $$ = $this->semStack[$1]; }
+    | type_qualifier_list type_qualifier    { $$ = $this->semStack[$1] | $this->semStack[$2]; }
     ;
 
-
 parameter_type_list
-    : parameter_list ',' ELLIPSIS           { $$ = [$1, true]; }
-    | parameter_list                        { $$ = [$1, false]; }
+    : parameter_list ',' ELLIPSIS           { $$ = [$this->semStack[$1], true]; }
+    | parameter_list                        { $$ = [$this->semStack[$1], false]; }
     ;
 
 parameter_list
-    : parameter_declaration                         { init($1); }
-    | parameter_list ',' parameter_declaration      { push($1, $3); }
+    : parameter_declaration                         { $$ = array($this->semStack[$1]); }
+    | parameter_list ',' parameter_declaration      { $this->semStack[$1][] = $this->semStack[$3]; $$ = $this->semStack[$1]; }
     ;
 
 parameter_declaration
-    : declaration_specifiers declarator             { compileParamVarDeclaration($1[0], $1[1], $2); }
-    | declaration_specifiers abstract_declarator    { compileParamAbstractDeclaration($1[0], $1[1], $2); }
-    | declaration_specifiers                        { compileParamAbstractDeclaration($1[0], $1[1], null); }
+    : declaration_specifiers declarator             { $$ = $this->compiler->compileParamVarDeclaration($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declaration_specifiers abstract_declarator    { $$ = $this->compiler->compileParamAbstractDeclaration($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declaration_specifiers                        { $$ = $this->compiler->compileParamAbstractDeclaration($this->semStack[$1][0], $this->semStack[$1][1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 identifier_list
@@ -387,19 +391,19 @@ identifier_list
     ;
 
 type_name
-    : specifier_qualifier_list abstract_declarator  { compileTypeReference($1[0], $1[1], $2); }
-    | specifier_qualifier_list                      { compileTypeReference($1[0], $1[1], null); }
+    : specifier_qualifier_list abstract_declarator  { $$ = $this->compiler->compileTypeReference($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | specifier_qualifier_list                      { $$ = $this->compiler->compileTypeReference($this->semStack[$1][0], $this->semStack[$1][1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 abstract_declarator
-    : pointer direct_abstract_declarator    { $$ = new IR\AbstractDeclarator($1, $2); }
-    | pointer                               { $$ = new IR\AbstractDeclarator($1, null); }
-    | direct_abstract_declarator            { $$ = new IR\AbstractDeclarator(null, $1); }
+    : pointer direct_abstract_declarator    { $$ = new IR\AbstractDeclarator($this->semStack[$1], $this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | pointer                               { $$ = new IR\AbstractDeclarator($this->semStack[$1], null, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | direct_abstract_declarator            { $$ = new IR\AbstractDeclarator(null, $this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 direct_abstract_declarator
-    : '(' abstract_declarator ')'                                                           { $$ = new IR\DirectAbstractDeclarator\AbstractDeclarator($1); }
-    | '[' ']'                                                                               { $$ = new IR\DirectAbstractDeclarator\IncompleteArray(); }
+    : '(' abstract_declarator ')'                                                           { $$ = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '[' ']'                                                                               { $$ = new IR\DirectAbstractDeclarator\IncompleteArray($this->startAttributeStack[$1] + $this->endAttributes); }
     | '[' '*' ']'                                                                           { throw new Error('direct_abstract_declarator bracket star not implemented'); }
     | '[' STATIC type_qualifier_list assignment_expression ']'                              { throw new Error('direct_abstract_declarator bracket static type qualifier list assignment not implemented'); }
     | '[' STATIC assignment_expression ']'                                                  { throw new Error('direct_abstract_declarator bracket static assignment not implemented'); }
@@ -439,8 +443,8 @@ designation
     ;
 
 designator_list
-    : designator                    { init($1); }
-    | designator_list designator    { push($1, $2); }
+    : designator                    { $$ = array($this->semStack[$1]); }
+    | designator_list designator    { $this->semStack[$1][] = $this->semStack[$2]; $this->semValue = $this->semStack[$1]; }
     ;
 
 designator
@@ -453,12 +457,12 @@ static_assert_declaration
     ;
 
 statement
-    : labeled_statement     { $$ = $1; }
-    | compound_statement    { $$ = $1; }
-    | expression_statement  { $$ = $1; }
-    | selection_statement   { $$ = $1; }
-    | iteration_statement   { $$ = $1; }
-    | jump_statement        { $$ = $1; } 
+    : labeled_statement     { $$ = $this->semStack[$1]; }
+    | compound_statement    { $$ = $this->semStack[$1]; }
+    | expression_statement  { $$ = $this->semStack[$1]; }
+    | selection_statement   { $$ = $this->semStack[$1]; }
+    | iteration_statement   { $$ = $this->semStack[$1]; }
+    | jump_statement        { $$ = $this->semStack[$1]; }
     ;
 
 labeled_statement
@@ -468,23 +472,23 @@ labeled_statement
     ;
 
 compound_statement
-    : '{' '}'                   { $$ = new Node\Stmt\CompoundStmt([]); }
-    | '{'  block_item_list '}'  { $$ = new Node\Stmt\CompoundStmt($2); }
+    : '{' '}'                   { $$ = new Node\Stmt\CompoundStmt([], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | '{'  block_item_list '}'  { $$ = new Node\Stmt\CompoundStmt($this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 block_item_list
-    : block_item                    { init($1); }
-    | block_item_list block_item    { push($1, $2); }
+    : block_item                    { $$ = array($this->semStack[$1]); }
+    | block_item_list block_item    { $this->semStack[$1][] = $this->semStack[$2]; $this->semValue = $this->semStack[$1]; }
     ;
 
 block_item
     : declaration           { throw new Error('block_item declaration not implemented'); }
-    | statement             { $$ = $1; }
+    | statement             { $$ = $this->semStack[$1]; }
     ;
 
 expression_statement
     : ';'                   { $$ = null; }
-    | expression ';'        { $$ = $1; }
+    | expression ';'        { $$ = $this->semStack[$1]; }
     ;
 
 selection_statement
@@ -506,28 +510,28 @@ jump_statement
     : GOTO IDENTIFIER ';'       { throw new Error('goto identifier not implemented'); }
     | CONTINUE ';'              { throw new Error('continue not implemented'); }
     | BREAK ';'                 { throw new Error('break not implemented'); }
-    | RETURN ';'                { $$ = new Node\Stmt\ReturnStmt(null); }
-    | RETURN expression ';'     { $$ = new Node\Stmt\ReturnStmt($2); }
+    | RETURN ';'                { $$ = new Node\Stmt\ReturnStmt(null, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | RETURN expression ';'     { $$ = new Node\Stmt\ReturnStmt($this->semStack[$2], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 translation_unit
-    : external_declaration                      { $$ = new Node\TranslationUnitDecl($1); }
-    | translation_unit external_declaration     { $$ = $1; $$->addDecl(...$2); }
+    : external_declaration                      { $$ = new Node\TranslationUnitDecl($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | translation_unit external_declaration     { $$ = $this->semStack[$1]; $this->semValue->addDecl(...$this->semStack[$2]); }
     ;
 
 external_declaration
-    : function_definition   { $$ = $1; }
-    | declaration           { compileExternalDeclaration($1); }
+    : function_definition   { $$ = $this->semStack[$1]; }
+    | declaration           { $$ = $this->compiler->compileExternalDeclaration($this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 function_definition
-    : declaration_specifiers declarator declaration_list compound_statement     { compileFunction($1[0], $1[1], $2, $3, $4); }
-    | declaration_specifiers declarator compound_statement                      { compileFunction($1[0], $1[1], $2, [], $3); }
+    : declaration_specifiers declarator declaration_list compound_statement     { $$ = $this->compiler->compileFunction($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], $this->semStack[$3], $this->semStack[$4], $this->startAttributeStack[$1] + $this->endAttributes); }
+    | declaration_specifiers declarator compound_statement                      { $$ = $this->compiler->compileFunction($this->semStack[$1][0], $this->semStack[$1][1], $this->semStack[$2], [], $this->semStack[$3], $this->startAttributeStack[$1] + $this->endAttributes); }
     ;
 
 declaration_list
-    : declaration                   { init($1); }
-    | declaration_list declaration  { push($1, $2); }
+    : declaration                   { $$ = array($this->semStack[$1]); }
+    | declaration_list declaration  { $this->semStack[$1][] = $this->semStack[$2]; $this->semValue = $this->semStack[$1]; }
     ;
 
 %%
