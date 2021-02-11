@@ -25,6 +25,11 @@ class Parser
         $this->context = $context ?? new Context($this->headerSearchPaths);
         //$this->context->defineInt('G_OS_WIN32', 1);
         //$this->context->defineInt('__GLIB_H_INSIDE__', 1);// because not #define assumed
+        $this->context->defineString('G_BEGIN_DECLS', 'extern "C" {');
+        $this->context->defineString('G_END_DECLS', '}');
+        $this->context->defineIdentifier('guint', 'int');
+
+
         $preprocessor = new PreProcessor($this->context);
         $tokens = $preprocessor->process($filename);
         return $this->parser->parse($tokens, $this->context);
