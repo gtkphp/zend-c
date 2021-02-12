@@ -4,7 +4,8 @@ return array(
     'typedefs'=>array(),
     'enums'=>array(
         'GBookmarkFileError'=>array(
-            'name' => 'GBookmarkFileError',
+            'name' => '',
+            'type' => 'enum',
             'constants' => Array
             (
                 'G_BOOKMARK_FILE_ERROR_INVALID_URI' => array(
@@ -50,7 +51,8 @@ return array(
             )
         ),
         'GDateDMY'=>array(
-            'name'=>'GDateDMY',
+            'name'=>'',
+            'type'=>'enum',
             'constants'=>array(
                 'G_DATE_DAY'=>array(
                     'name' => 'G_DATE_DAY',
@@ -70,7 +72,8 @@ return array(
             )
         ),
         'GFileTest'=>array(
-            'name'=>'GFileTest',
+            'name'=>'',
+            'type'=>'enum',
             'constants'=>array(
                 'G_FILE_TEST_IS_REGULAR'=>array(
                     'name' => 'G_FILE_TEST_IS_REGULAR',
@@ -100,7 +103,8 @@ return array(
             )
         ),
         'GIOChannelError'=>array(
-            'name'=>'GIOChannelError',
+            'name'=>'',
+            'type'=>'enum',
             'constants'=>array(
                 'G_IO_CHANNEL_ERROR_FBIG'=>array(
                     'name' => 'G_IO_CHANNEL_ERROR_FBIG',
@@ -150,7 +154,8 @@ return array(
             )
         ),
         'GIOFlags'=>array(
-            'name'=>'GIOFlags',
+            'name'=>'',
+            'type'=>'enum',
             'constants'=>array(
                 'G_IO_FLAG_APPEND'=>array(
                     'name' => 'G_IO_FLAG_APPEND',
@@ -199,6 +204,5 @@ return array(
                 ),
             )
         ),
-    ),
-    'structs'=>array()
+    )
 );

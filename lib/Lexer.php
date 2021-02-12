@@ -198,6 +198,13 @@ class Lexer
                     return [Tokens::T_LE_OP, '<='];
                 }
                 goto emit_single;
+            case '~':
+                if ($this->currentToken !== null && $this->currentToken->value === '=') {
+                    $this->currentToken = $this->currentToken->next;
+                    return [Tokens::T_NOT_ASSIGN, '~='];
+                } else {
+                    return [Tokens::T_NOT_OP, '~'];
+                }
             case ';':
             case '(':
             case ')':

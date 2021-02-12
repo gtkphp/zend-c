@@ -29,85 +29,6 @@ class ParserTest extends TestCase {
     gdouble dummy;
   } unused;
 };';
-
-    /**
-     *
-     * $tokens = new Tokens();
-     * $stream = new Stream($tokens);
-     * $scanner = new Scanner($stream);
-     * $parser = new Parser($stream);
-     * $parser->context->typedef('guint', 'unsigned int');
-     *
-     * $parser->typedef('typedef struct _Foo Foo;');
-     *
-     */
-    public function testParser() {
-        $this->printer = new C;
-
-        $context = new \Zend\C\Engine\Context;
-
-        $parser = new \Zend\C\Parser($context);
-        $parser->parse(__DIR__ . '/../data/config.h');
-        //$context->defineIdentifier('gdouble', 'double');
-        /*
-        $context->scope->typedef('pthread_t', new BuiltinType('pthread_t'));
-        $context->scope->typedef('GStaticMutex', new BuiltinType('GStaticMutex'));
-        $context->scope->typedef('guint', new BuiltinType('unsigned int'));
-        $context->scope->typedef('gdouble', new BuiltinType('double'));
-        */
-
-
-        $translationUnit = $parser->parse(__DIR__ . '/../data/struct.h');
-        $actual = $this->printer->print($translationUnit);
-        $this->assertEquals(self::EXPECTED, trim($actual));
-
-        // TODO make remain resolve type
-        //$translationUnit = $parser->parse(__DIR__ . '/../data/struct-dependency.h');
-        //echo $this->printer->print($translationUnit);
-
-        $this->assertTrue(True);
-    }
-
-    public function testEnumerationParser() {
-        $expected = 'typedef enum {
-  G_BOOKMARK_FILE_ERROR_INVALID_URI,
-  G_BOOKMARK_FILE_ERROR_INVALID_VALUE,
-  G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED,
-  G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND,
-  G_BOOKMARK_FILE_ERROR_READ,
-  G_BOOKMARK_FILE_ERROR_UNKNOWN_ENCODING,
-  G_BOOKMARK_FILE_ERROR_WRITE,
-  G_BOOKMARK_FILE_ERROR_FILE_NOT_FOUND,
-} GBookmarkFileError;';
-        $expected_array = array('enums'=>array(
-            'GBookmarkFileError'=>array(
-                'name'=>'GBookmarkFileError',
-                'constants'=>array(
-                    'G_BOOKMARK_FILE_ERROR_INVALID_URI' => 0,//array('name'=>'G_BOOKMARK_FILE_ERROR_INVALID_URI', 'value'=>0),
-                    'G_BOOKMARK_FILE_ERROR_INVALID_VALUE' => 1,
-                    'G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED' => 2,
-                    'G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND' => 3,
-                    'G_BOOKMARK_FILE_ERROR_READ' => 4,
-                    'G_BOOKMARK_FILE_ERROR_UNKNOWN_ENCODING' => 5,
-                    'G_BOOKMARK_FILE_ERROR_WRITE' => 6,
-                    'G_BOOKMARK_FILE_ERROR_FILE_NOT_FOUND' => 7,
-                )
-            )
-        ));
-        $printer = new C;//PhpPrinter;
-
-        $context = new \Zend\C\Engine\Context;
-
-        $parser = new \Zend\C\Parser($context);
-        $parser->parse(__DIR__ . '/../data/config.h');
-
-        $translationUnit = $parser->parse(__DIR__ . '/../data/header.h');
-        //var_export($translationUnit);
-        $actual = $printer->print($translationUnit);
-        $this->assertEquals($expected, trim($actual));
-
-        $this->assertTrue(True);
-    }
     protected function setUp()
     {
         $this->context = new \Zend\C\Engine\Context;
@@ -118,37 +39,71 @@ class ParserTest extends TestCase {
         $tokens = $this->preprocessor->process(__DIR__ . '/../data/config.h');
         $this->parser->parse($tokens, $this->context);
     }
+    public function testUnionParser() {
+        $data_filename = __DIR__.'/data/union-GMutex.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+        //var_dump($ast);
+
+        $printer = new PhpPrinter;
+        $actual = array();
+        $printer->print($ast, $actual);
+
+        $expected = include __DIR__.'/expect/union-GMutex.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        $this->assertTrue(True);
+    }
+
+    public function testStructParser() {
+        $data_filename = __DIR__.'/data/struct-GStaticRecMutex.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+        $printer = new PhpPrinter;
+        $printer->print($ast, $actual);
+
+        $expected = include __DIR__.'/expect/struct-GStaticRecMutex.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        /*
+        $actual = $printer->evaluate();
+        */
+
+        $this->assertTrue(True);
+    }
 
     public function filenameProvider():array
     {
         return [
-            ['enum', 'GBookmarkFileError'],
+#            ['enum', 'GBookmarkFileError'],
 #            ['enum', 'GDateDMY'],
 #            ['enum', 'GFileTest'],
 #            ['enum', 'GIOChannelError'],
 #            ['enum', 'GIOFlags'],
+#            ['enum', 'GIOCondition']
+            ['enum', 'GLogLevelFlags']
         ];
     }
 
     /**
      * @dataProvider filenameProvider
      */
-    function testExpressionParser($type, $name) {
+    function testEnumParser($type, $name) {
         $printer = new PhpPrinter;
 
         $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 
-        $printer->print($ast);
 
-        $actual = $printer->array[$type.'s'][$name];
-        //print_r($actual);
+        $printer->print($ast, $actual);
 
-        $expect = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
-        //print_r($expect);
-        $this->assertTrue($expect === $actual);
+        $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
 
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected === $actual);
         $this->assertTrue(True);
     }
 
@@ -166,17 +121,19 @@ class ParserTest extends TestCase {
     function testEnumsParser() {
         $printer = new PhpPrinter;
 
+        $actual = array();
         $datas = $this->enumsProvider();
         foreach($datas as list($type, $name)) {
             //list($type, $name) = $data;
             $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
             $tokens = $this->preprocessor->process($data_filename);
             $ast = $this->parser->parse($tokens, $this->context);
-            $printer->print($ast);
+            $printer->print($ast, $actual);
         }
 
         $expected = include __DIR__.'/expect/eval-enums.php';
-        $actual = $printer->evaluate();
+        $printer->evaluate($actual);
+        $actual['typedefs'] = array();
         //print_r($actual);
 
         $this->assertEquals($expected, $actual);

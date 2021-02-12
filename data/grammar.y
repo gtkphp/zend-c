@@ -3,10 +3,10 @@
 
 
 %token  IDENTIFIER I_CONSTANT F_CONSTANT STRING_LITERAL FUNC_NAME SIZEOF
-%token  PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
+%token  PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP NOT_OP
 %token  AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
 %token  SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token  XOR_ASSIGN OR_ASSIGN
+%token  XOR_ASSIGN OR_ASSIGN NOT_ASSIGN
 %token  TYPEDEF_NAME ENUMERATION_CONSTANT
 
 %token  TYPEDEF EXTERN STATIC AUTO REGISTER INLINE
@@ -81,6 +81,7 @@ unary_expression
     : postfix_expression                { $$ = $this->semStack[$1]; }
     | INC_OP unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_PREINC, $this->startAttributeStack[$1] + $this->endAttributes); }
     | DEC_OP unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_PREDEC, $this->startAttributeStack[$1] + $this->endAttributes); }
+    | NOT_OP unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_BITWISE_NOT, $this->startAttributeStack[$1] + $this->endAttributes); }
     | unary_operator cast_expression    { $$ = new Expr\UnaryOperator($this->semStack[$2], $this->semStack[$1], $this->startAttributeStack[$1] + $this->endAttributes); }
     | SIZEOF unary_expression           { $$ = new Expr\UnaryOperator($this->semStack[$2], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$1] + $this->endAttributes); }
     | SIZEOF '(' type_name ')'          { $$ = new Expr\UnaryOperator($this->semStack[$3], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$1] + $this->endAttributes); }
@@ -92,8 +93,11 @@ unary_operator
     | '*'       { $$ = Expr\UnaryOperator::KIND_DEREF; }
     | '+'       { $$ = Expr\UnaryOperator::KIND_PLUS; }
     | '-'       { $$ = Expr\UnaryOperator::KIND_MINUS; }
-    | '~'       { $$ = Expr\UnaryOperator::KIND_BITWISE_NOT; }
     | '!'       { $$ = Expr\UnaryOperator::KIND_LOGICAL_NOT; }
+    ;
+
+bitwise_operator
+    : '~'       { $$ = Expr\UnaryOperator::KIND_BITWISE_NOT; }
     ;
 
 cast_expression
