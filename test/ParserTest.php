@@ -84,7 +84,8 @@ class ParserTest extends TestCase {
 #            ['enum', 'GIOFlags'],
 #            ['enum', 'GIOCondition']
 #            ['enum', 'GLogLevelFlags']
-            ['enum', 'GTokenType']
+#            ['enum', 'GTokenType']
+            ['enum', 'GVariantClass']
         ];
     }
 
@@ -103,6 +104,8 @@ class ParserTest extends TestCase {
         $printer->evaluate($actual);
 
         $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
+        print_r($actual);
+        print_r($expected);
 
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected === $actual);

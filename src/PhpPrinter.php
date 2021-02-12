@@ -286,7 +286,7 @@ class PhpPrinter
                     $value = ++$count;
                     $array['enums'][$name]['constants'][$key]['value']=$value;
                     $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
-                } else if(in_array($constant['expression'], array('(', ')', '{', '}', '[', ']', '=', ','))){
+                } else if(strlen($constant['expression'])==1 && ctype_print($constant['expression'])){
                     $value = ord($constant['expression']);
                     $array['enums'][$name]['constants'][$key]['value']=$value;
                     $count = $value;
