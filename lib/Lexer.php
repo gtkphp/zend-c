@@ -89,6 +89,12 @@ class Lexer
         }
         return [Tokens::T_I_CONSTANT, $number];
     }
+    private function extractLiteral(): array {
+        $char = $this->currentToken->value;
+        //$number = ord($char);
+        $this->currentToken = $this->currentToken->next;
+        return [Tokens::T_STRING_LITERAL, $char];
+    }
 
 
     private function extractPunctuation(): array {
@@ -137,6 +143,12 @@ class Lexer
                 }
                 goto emit_single;
             case '=':
+                if (   null !== $this->currentToken
+                    && null !== $this->currentToken->next
+                    &&  ','  == $this->currentToken->next->value) {
+                    // special case for enum { CONST = '=', }
+                    goto emit_single;
+                }
                 if ($this->currentToken !== null && $this->currentToken->value === '=') {
                     $this->currentToken = $this->currentToken->next;
                     return [Tokens::T_EQ_OP, '=='];

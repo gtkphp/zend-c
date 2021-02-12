@@ -20,72 +20,76 @@ use Zend\C\Engine\ParserAbstract;
  */
 class Parser extends ParserAbstract
 {
-    protected $tokenToSymbolMapSize = #(YYMAXLEX);
-    protected $actionTableSize      = #(YYLAST);
-    protected $gotoTableSize        = #(YYGLAST);
 
-    protected $invalidSymbol       = #(YYBADCH);
-    protected $errorSymbol         = #(YYINTERRTOK);
-    protected $defaultAction       = #(YYDEFAULT);
-    protected $unexpectedTokenRule = #(YYUNEXPECTED);
+    function __construct(Lexer $lexer) {
+        parent::__construct($lexer);
+        $this->tokenToSymbolMapSize = #(YYMAXLEX);
+        $this->actionTableSize      = #(YYLAST);
+        $this->gotoTableSize        = #(YYGLAST);
 
-    protected $YY2TBLSTATE = #(YY2TBLSTATE);
-    protected $numNonLeafStates  = #(YYNLSTATES);
+        $this->invalidSymbol       = #(YYBADCH);
+        $this->errorSymbol         = #(YYINTERRTOK);
+        $this->defaultAction       = #(YYDEFAULT);
+        $this->unexpectedTokenRule = #(YYUNEXPECTED);
 
-    protected $symbolToName = array(
-        #listvar terminals
-    );
+        $this->YY2TBLSTATE = #(YY2TBLSTATE);
+        $this->numNonLeafStates  = #(YYNLSTATES);
 
-    protected $tokenToSymbol = array(
-        #listvar yytranslate
-    );
+        $this->symbolToName = array(
+                #listvar terminals
+            );
 
-    protected $action = array(
-        #listvar yyaction
-    );
+        $this->tokenToSymbol = array(
+                #listvar yytranslate
+            );
 
-    protected $actionCheck = array(
-        #listvar yycheck
-    );
+        $this->action = array(
+                #listvar yyaction
+            );
 
-    protected $actionBase = array(
-        #listvar yybase
-    );
+        $this->actionCheck = array(
+                #listvar yycheck
+            );
 
-    protected $actionDefault = array(
-        #listvar yydefault
-    );
+        $this->actionBase = array(
+                #listvar yybase
+            );
 
-    protected $goto = array(
-        #listvar yygoto
-    );
+        $this->actionDefault = array(
+                #listvar yydefault
+            );
 
-    protected $gotoCheck = array(
-        #listvar yygcheck
-    );
+        $this->goto = array(
+                #listvar yygoto
+            );
 
-    protected $gotoBase = array(
-        #listvar yygbase
-    );
+        $this->gotoCheck = array(
+                #listvar yygcheck
+            );
 
-    protected $gotoDefault = array(
-        #listvar yygdefault
-    );
+        $this->gotoBase = array(
+                #listvar yygbase
+            );
 
-    protected $ruleToNonTerminal = array(
-        #listvar yylhs
-    );
+        $this->gotoDefault = array(
+                #listvar yygdefault
+            );
 
-    protected $ruleToLength = array(
-        #listvar yylen
-    );
+        $this->ruleToNonTerminal = array(
+                #listvar yylhs
+            );
+
+        $this->ruleToLength = array(
+                #listvar yylen
+            );
 #if -t
 
-    protected $productions = array(
-        #production-strings;
-    );
+        $this->productions = array(
+                #production-strings;
+            );
 #endif
 
+    }
     protected function initReduceCallbacks() {
         $this->reduceCallbacks = [
 #reduce

@@ -125,12 +125,14 @@ class PhpPrinter
         $constants = array();
         foreach ($decl->fields as $field) {
             $constant = array('name'=>$field->name, 'expression'=>Null, 'value'=>Null);
-            $constant['value']=Null;
             if (isset($field->value)) {
                 $constant['expression']=$this->printExpr($field->value, 0);
             }
             if ($field->value instanceof Expr\IntegerLiteral) {
-                $constant['value']=\intval($this->printExpr($field->value, 0));
+                $exp = $this->printExpr($field->value, 0);
+                if (is_numeric($exp)) {
+                    $constant['value']=\intval($exp);
+                }
             }
 
             $array['constants'][$field->name] = $constant;
@@ -271,9 +273,11 @@ class PhpPrinter
         foreach($array['enums'] as $name => $enum) {
             $count = -1;
             foreach($enum['constants'] as $key=>$constant) {
+                //var_export($constant['value']);
                 if (is_integer($constant['value'])) {
                     $value = $constant['value'];
                     $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
+                    $count = $value;
                 } else if (is_numeric($constant['expression'])) {
                     $count = intval($constant['expression']);
                     $array['enums'][$name]['constants'][$key]['value']=$count;
@@ -282,6 +286,10 @@ class PhpPrinter
                     $value = ++$count;
                     $array['enums'][$name]['constants'][$key]['value']=$value;
                     $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
+                } else if(in_array($constant['expression'], array('(', ')', '{', '}', '[', ']', '=', ','))){
+                    $value = ord($constant['expression']);
+                    $array['enums'][$name]['constants'][$key]['value']=$value;
+                    $count = $value;
                 }
             }
         }

@@ -13,7 +13,7 @@ use Zend\C\Engine\Node\Type\BuiltinType;
 use Zend\C\Engine\Printer\C;
 
 use Zend\C\ExpressionParser;
-use Zend\C\ExpressionTokens;
+//use Zend\C\ExpressionTokens;
 
 use PHPUnit\Framework\TestCase;
 
@@ -83,7 +83,8 @@ class ParserTest extends TestCase {
 #            ['enum', 'GIOChannelError'],
 #            ['enum', 'GIOFlags'],
 #            ['enum', 'GIOCondition']
-            ['enum', 'GLogLevelFlags']
+#            ['enum', 'GLogLevelFlags']
+            ['enum', 'GTokenType']
         ];
     }
 
@@ -99,6 +100,7 @@ class ParserTest extends TestCase {
 
 
         $printer->print($ast, $actual);
+        $printer->evaluate($actual);
 
         $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
 
