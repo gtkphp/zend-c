@@ -270,6 +270,9 @@ class PhpPrinter
             }
             return $this->printExpr($expr->fn, $level) . '(' . implode(', ', $args) . ')';
         }
+        if($expr instanceof Expr\StringLiteral) {
+            return $expr->value;
+        }
     }
 
 
