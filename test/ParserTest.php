@@ -56,6 +56,37 @@ class ParserTest extends TestCase {
         $this->assertTrue(True);
     }
 
+    public function structProvider():array
+    {
+        return [
+#            ['struct', 'GStaticRecMutex'],
+            ['struct', 'GArray']
+        ];
+    }
+
+    /**
+     * @dataProvider structProvider
+     */
+    function testStructsParser($type, $name) {
+        $printer = new PhpPrinter;
+
+        $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+
+        $printer->print($ast, $actual);
+        //$printer->evaluate($actual);// replace gint to int
+
+        $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
+        //print_r($actual);
+        //print_r($expected);
+
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected === $actual);
+        $this->assertTrue(True);
+    }
+
     public function testStructParser() {
         $data_filename = __DIR__.'/data/struct-GStaticRecMutex.h';
         $tokens = $this->preprocessor->process($data_filename);
@@ -74,7 +105,7 @@ class ParserTest extends TestCase {
         $this->assertTrue(True);
     }
 
-    public function filenameProvider():array
+    public function enumProvider():array
     {
         return [
 #            ['enum', 'GBookmarkFileError'],
@@ -90,7 +121,7 @@ class ParserTest extends TestCase {
     }
 
     /**
-     * @dataProvider filenameProvider
+     * @dataProvider enumProvider
      */
     function testEnumParser($type, $name) {
         $printer = new PhpPrinter;
@@ -104,8 +135,8 @@ class ParserTest extends TestCase {
         $printer->evaluate($actual);
 
         $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
-        print_r($actual);
-        print_r($expected);
+        //print_r($actual);
+        //print_r($expected);
 
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected === $actual);

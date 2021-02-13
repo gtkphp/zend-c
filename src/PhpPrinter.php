@@ -169,7 +169,11 @@ class PhpPrinter
             $this->printDecl($node->decl, $array);
         } else if ($node instanceof Type\TagType\EnumType) {
             $this->printDecl($node->decl, $array);
+        } else if ($node instanceof Type\PointerType) {
+            $array['type']= $node->parent->name;
+            $array['modifier']= '*';
         } else {
+            echo get_class($node)."\n";
             echo "Error 55: Not implemented\n";
         }
     }
@@ -270,6 +274,7 @@ class PhpPrinter
     public function evaluate(&$array) {
 
         $this->script = '';
+        if (isset($array['enums']))
         foreach($array['enums'] as $name => $enum) {
             $count = -1;
             foreach($enum['constants'] as $key=>$constant) {
@@ -295,7 +300,7 @@ class PhpPrinter
         }
 
         //echo $this->script . PHP_EOL;
-
+        if (isset($array['enums']))
         foreach($array['enums'] as $name => $enum) {
             foreach($enum['constants'] as $key=>$constant) {
                 if (!isset($constant['value'])) {
