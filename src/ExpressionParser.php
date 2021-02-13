@@ -6,6 +6,7 @@ use Zend\C\Engine\Lexer;
 use Zend\C\Engine\Node\Stmt\ValueStmt\Expr;
 use Zend\C\Engine\Node;
 use Zend\C\Engine\IR;
+use Zend\C\Engine\Error;
 
 use Zend\C\Engine\ParserAbstract;
 
