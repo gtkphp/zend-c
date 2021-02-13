@@ -60,7 +60,8 @@ class ParserTest extends TestCase {
     {
         return [
 #            ['struct', 'GStaticRecMutex'],
-            ['struct', 'GArray']
+            ['struct', 'GDate'],
+#            ['struct', 'GArray']
         ];
     }
 

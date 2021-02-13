@@ -116,6 +116,9 @@ class PhpPrinter
             $member  = array('name'=>$field->name);
             $this->printType($field->type, $member);
             $array['members'][$field->name] = $member;
+            if (isset($field->initializer)) {
+                $array['members'][$field->name]['size'] = $field->initializer->value;
+            }
         }
     }
 

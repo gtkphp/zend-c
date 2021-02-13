@@ -788,835 +788,841 @@ class ExpressionParser extends ParserAbstract
                 $this->semValue = $this->semStack[$stackPos];
             },
             1 => function ($stackPos) {
-                $this->semValue = new Expr\DeclRefExpr($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Expr\DeclRefExpr($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_0*/
             },
             2 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_1*/
             },
             3 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_2*/
             },
             4 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(3-2)];
+                $this->semValue = $this->semStack[$stackPos-(3-2)];/*LABEL_3*/
             },
             5 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_4*/
             },
             6 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_5*/
             },
             7 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ValueStmt\Expr\FloatLiteral($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\ValueStmt\Expr\FloatLiteral($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_6*/
             },
             8 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ValueStmt\Expr\DeclRefExpr($this->semStack[$stackPos-(1-1)], $this->scope->enum($this->semStack[$stackPos-(1-1)]), $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\ValueStmt\Expr\DeclRefExpr($this->semStack[$stackPos-(1-1)], $this->scope->enum($this->semStack[$stackPos-(1-1)]), $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_7*/
             },
             9 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_8*/
             },
             10 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ValueStmt\Expr\IntegerLiteral($this->semStack[$stackPos-(1-1)]); /*throw new Error('string_literal not implemented');*/
+                $this->semValue = new Node\Stmt\ValueStmt\Expr\StringLiteral($this->semStack[$stackPos-(1-1)]); /*throw new Error('string_literal not implemented');*/
             },
             11 => function ($stackPos) {
-                throw new Error('func name not implemented');
+                throw new Error('func name not implemented');/*LABEL_9*/
             },
             12 => function ($stackPos) {
-                throw new Error('generic not implemented');
+                throw new Error('generic not implemented');/*LABEL_10*/
             },
             13 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_11*/
             },
             14 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_12*/
             },
             15 => function ($stackPos) {
-                throw new Error('generic association typename not implemented');
+                throw new Error('generic association typename not implemented');/*LABEL_13*/
             },
             16 => function ($stackPos) {
-                throw new Error('generic association default not implemented');
+                throw new Error('generic association default not implemented');/*LABEL_14*/
             },
             17 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_15*/
             },
             18 => function ($stackPos) {
-                throw new Error('dim fetch not implemented');
+                throw new Error('dim fetch not implemented');/*LABEL_16*/
             },
             19 => function ($stackPos) {
-                $this->semValue = new Expr\CallExpr($this->semStack[$stackPos-(3-1)], [], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\CallExpr($this->semStack[$stackPos-(3-1)], [], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_17*/
             },
             20 => function ($stackPos) {
-                $this->semValue = new Expr\CallExpr($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Expr\CallExpr($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_18*/
             },
             21 => function ($stackPos) {
-                throw new Error('.identifier not implemented');
+                throw new Error('.identifier not implemented');/*LABEL_19*/
             },
             22 => function ($stackPos) {
-                throw new Error('->identifier not implemented');
+                throw new Error('->identifier not implemented');/*LABEL_20*/
             },
             23 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_POSTINC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_POSTINC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_21*/
             },
             24 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_POSTDEC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_POSTDEC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_22*/
             },
             25 => function ($stackPos) {
-                throw new Error('initializer list no trailing not implemented');
+                throw new Error('initializer list no trailing not implemented');/*LABEL_23*/
             },
             26 => function ($stackPos) {
-                throw new Error('initializer list trailing not implemented');
+                throw new Error('initializer list trailing not implemented');/*LABEL_24*/
             },
             27 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_25*/
             },
             28 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_26*/
             },
             29 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_27*/
             },
             30 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_PREINC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_PREINC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_28*/
             },
             31 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_PREDEC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_PREDEC, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_29*/
             },
             32 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_BITWISE_NOT, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_BITWISE_NOT, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_30*/
             },
             33 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], $this->semStack[$stackPos-(2-1)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], $this->semStack[$stackPos-(2-1)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_31*/
             },
             34 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(2-2)], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_32*/
             },
             35 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(4-3)], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(4-3)], Expr\UnaryOperator::KIND_SIZEOF, $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_33*/
             },
             36 => function ($stackPos) {
-                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(4-3)], Expr\UnaryOperator::KIND_ALIGNOF, $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Expr\UnaryOperator($this->semStack[$stackPos-(4-3)], Expr\UnaryOperator::KIND_ALIGNOF, $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_34*/
             },
             37 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_ADDRESS_OF;
+                $this->semValue = Expr\UnaryOperator::KIND_ADDRESS_OF;/*LABEL_35*/
             },
             38 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_DEREF;
+                $this->semValue = Expr\UnaryOperator::KIND_DEREF;/*LABEL_36*/
             },
             39 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_PLUS;
+                $this->semValue = Expr\UnaryOperator::KIND_PLUS;/*LABEL_37*/
             },
             40 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_MINUS;
+                $this->semValue = Expr\UnaryOperator::KIND_MINUS;/*LABEL_38*/
             },
             41 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_LOGICAL_NOT;
+                $this->semValue = Expr\UnaryOperator::KIND_LOGICAL_NOT;/*LABEL_39*/
             },
             42 => function ($stackPos) {
-                $this->semValue = Expr\UnaryOperator::KIND_BITWISE_NOT;
+                $this->semValue = Expr\UnaryOperator::KIND_BITWISE_NOT;/*LABEL_40*/
             },
             43 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_41*/
             },
             44 => function ($stackPos) {
-                $this->semValue = new Expr\CastExpr($this->semStack[$stackPos-(4-4)], $this->semStack[$stackPos-(4-2)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Expr\CastExpr($this->semStack[$stackPos-(4-4)], $this->semStack[$stackPos-(4-2)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_42*/
             },
             45 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_43*/
             },
             46 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_MUL, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_MUL, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_44*/
             },
             47 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_DIV, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_DIV, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_45*/
             },
             48 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_REM, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_REM, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_46*/
             },
             49 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_47*/
             },
             50 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_ADD, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_ADD, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_48*/
             },
             51 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SUB, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SUB, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_49*/
             },
             52 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_50*/
             },
             53 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SHL, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SHL, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_51*/
             },
             54 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SHR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_SHR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_52*/
             },
             55 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_53*/
             },
             56 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LT, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LT, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_54*/
             },
             57 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_GT, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_GT, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_55*/
             },
             58 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_56*/
             },
             59 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_GE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_GE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_57*/
             },
             60 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_58*/
             },
             61 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_EQ, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_EQ, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_59*/
             },
             62 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_NE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_NE, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_60*/
             },
             63 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_61*/
             },
             64 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_AND, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_AND, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_62*/
             },
             65 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_63*/
             },
             66 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_XOR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_XOR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_64*/
             },
             67 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_65*/
             },
             68 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_OR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_BITWISE_OR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_66*/
             },
             69 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_67*/
             },
             70 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LOGICAL_AND, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LOGICAL_AND, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_68*/
             },
             71 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_69*/
             },
             72 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LOGICAL_OR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_LOGICAL_OR, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_70*/
             },
             73 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_71*/
             },
             74 => function ($stackPos) {
-                $this->semValue = new Expr\AbstractConditionalOperator\ConditionalOperator($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-3)], $this->semStack[$stackPos-(5-5)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);
+                $this->semValue = new Expr\AbstractConditionalOperator\ConditionalOperator($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-3)], $this->semStack[$stackPos-(5-5)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);/*LABEL_72*/
             },
             75 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_73*/
             },
             76 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_74*/
             },
             77 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_ASSIGN;/*LABEL_75*/
             },
             78 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_MUL_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_MUL_ASSIGN;/*LABEL_76*/
             },
             79 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_DIV_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_DIV_ASSIGN;/*LABEL_77*/
             },
             80 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_REM_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_REM_ASSIGN;/*LABEL_78*/
             },
             81 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_ADD_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_ADD_ASSIGN;/*LABEL_79*/
             },
             82 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_SUB_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_SUB_ASSIGN;/*LABEL_80*/
             },
             83 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_SHL_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_SHL_ASSIGN;/*LABEL_81*/
             },
             84 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_SHR_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_SHR_ASSIGN;/*LABEL_82*/
             },
             85 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_AND_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_AND_ASSIGN;/*LABEL_83*/
             },
             86 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_XOR_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_XOR_ASSIGN;/*LABEL_84*/
             },
             87 => function ($stackPos) {
-                $this->semValue = Expr\BinaryOperator::KIND_OR_ASSIGN;
+                $this->semValue = Expr\BinaryOperator::KIND_OR_ASSIGN;/*LABEL_85*/
             },
             88 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_86*/
             },
             89 => function ($stackPos) {
-                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_COMMA, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Expr\BinaryOperator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], Expr\BinaryOperator::KIND_COMMA, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_87*/
             },
             90 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_88*/
             },
             91 => function ($stackPos) {
-                $this->semValue = new IR\Declaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], [], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\Declaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], [], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_89*/
             },
             92 => function ($stackPos) {
-                $this->semValue = new IR\Declaration($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1], $this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\Declaration($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1], $this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_90*/
             },
             93 => function ($stackPos) {
                 $this->semValue = $this->semStack[$stackPos];
             },
             94 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];/*LABEL_91*/
             },
             95 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];/*LABEL_92*/
             },
             96 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; array_unshift($this->semValue[1], $this->semStack[$stackPos-(2-1)]);
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; array_unshift($this->semValue[1], $this->semStack[$stackPos-(2-1)]);/*LABEL_93*/
             },
             97 => function ($stackPos) {
-                $this->semValue = [0, [$this->semStack[$stackPos-(1-1)]]];
+                $this->semValue = [0, [$this->semStack[$stackPos-(1-1)]]];/*LABEL_94*/
             },
             98 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];/*LABEL_95*/
             },
             99 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];/*LABEL_96*/
             },
             100 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];/*LABEL_97*/
             },
             101 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];/*LABEL_98*/
             },
             102 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];/*LABEL_99*/
             },
             103 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];/*LABEL_100*/
             },
             104 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_101*/
             },
             105 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_102*/
             },
             106 => function ($stackPos) {
-                $this->semValue = new IR\InitDeclarator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\InitDeclarator($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_103*/
             },
             107 => function ($stackPos) {
-                $this->semValue = new IR\InitDeclarator($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\InitDeclarator($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_104*/
             },
             108 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_TYPEDEF;
+                $this->semValue = Node\Decl::KIND_TYPEDEF;/*LABEL_105*/
             },
             109 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_EXTERN;
+                $this->semValue = Node\Decl::KIND_EXTERN;/*LABEL_106*/
             },
             110 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_STATIC;
+                $this->semValue = Node\Decl::KIND_STATIC;/*LABEL_107*/
             },
             111 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_THREAD_LOCAL;
+                $this->semValue = Node\Decl::KIND_THREAD_LOCAL;/*LABEL_108*/
             },
             112 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_AUTO;
+                $this->semValue = Node\Decl::KIND_AUTO;/*LABEL_109*/
             },
             113 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_REGISTER;
+                $this->semValue = Node\Decl::KIND_REGISTER;/*LABEL_110*/
             },
             114 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_111*/
             },
             115 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_112*/
             },
             116 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_113*/
             },
             117 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_114*/
             },
             118 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_115*/
             },
             119 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_116*/
             },
             120 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_117*/
             },
             121 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_118*/
             },
             122 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_119*/
             },
             123 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_120*/
             },
             124 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_121*/
             },
             125 => function ($stackPos) {
-                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\BuiltinType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_122*/
             },
             126 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_123*/
             },
             127 => function ($stackPos) {
-                $this->semValue = new Node\Type\TagType\RecordType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\TagType\RecordType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_124*/
             },
             128 => function ($stackPos) {
-                $this->semValue = new Node\Type\TagType\EnumType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\TagType\EnumType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_125*/
             },
             129 => function ($stackPos) {
-                $this->semValue = new Node\Type\TypedefType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\Type\TypedefType($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_126*/
             },
             130 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(4-1)], null, $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(4-1)], null, $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_127*/
             },
             131 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);/*LABEL_128*/
             },
             132 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_129*/
             },
             133 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(5-1)], $this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);/*LABEL_130*/
             },
             134 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_131*/
             },
             135 => function ($stackPos) {
-                $this->semValue = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_STRUCT;
+                $this->semValue = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_STRUCT;/*LABEL_132*/
             },
             136 => function ($stackPos) {
-                $this->semValue = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_UNION;
+                $this->semValue = Node\Decl\NamedDecl\TypeDecl\TagDecl\RecordDecl::KIND_UNION;/*LABEL_133*/
             },
             137 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_134*/
             },
             138 => function ($stackPos) {
-                $this->semValue = array_merge($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)]);
+                $this->semValue = array_merge($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)]);/*LABEL_135*/
             },
             139 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileStructField($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileStructField($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_136*/
             },
             140 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileStructField($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1], $this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                //echo "\n->[0]\n";
+                //var_export($this->semStack[$stackPos-(3-1)][0]);// 0
+                //echo "\n->[1]\n";
+                //var_export($this->semStack[$stackPos-(3-1)][1]);// array(0=>Node\Type\BuiltinType:)
+                //echo "\n->[]\n";
+                //var_export($this->semStack[$stackPos-(3-2)]);// array(0=>IR\FieldDeclaration:)
+                $this->semValue = $this->compiler->compileStructField($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1],  $this->semStack[$stackPos-(3-2)]/*$this->semStack[$stackPos-(3-2)]*/, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_137*/
             },
             141 => function ($stackPos) {
                 $this->semValue = $this->semStack[$stackPos];
             },
             142 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; array_unshift($this->semValue[1], $this->semStack[$stackPos-(2-1)]);
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; array_unshift($this->semValue[1], $this->semStack[$stackPos-(2-1)]);/*LABEL_138*/
             },
             143 => function ($stackPos) {
-                $this->semValue = [0, [$this->semStack[$stackPos-(1-1)]]];
+                $this->semValue = [0, [$this->semStack[$stackPos-(1-1)]]];/*LABEL_139*/
             },
             144 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-2)]; $this->semValue[0] |= $this->semStack[$stackPos-(2-1)];/*LABEL_140*/
             },
             145 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], []];/*LABEL_141*/
             },
             146 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_142*/
             },
             147 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_143*/
             },
             148 => function ($stackPos) {
-                $this->semValue = new IR\FieldDeclaration(null, $this->semStack[$stackPos-(2-1)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\FieldDeclaration(null, $this->semStack[$stackPos-(2-1)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_144*/
             },
             149 => function ($stackPos) {
-                $this->semValue = new IR\FieldDeclaration($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\FieldDeclaration($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_145*/
             },
             150 => function ($stackPos) {
-                $this->semValue = new IR\FieldDeclaration($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\FieldDeclaration($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_146*/
             },
             151 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_147*/
             },
             152 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$stackPos-(5-3)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl(null, $this->semStack[$stackPos-(5-3)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);/*LABEL_148*/
             },
             153 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(5-2)], $this->semStack[$stackPos-(5-4)], $this->startAttributeStack[$stackPos-(5-1)] + $this->endAttributes);/*LABEL_149*/
             },
             154 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(6-2)], $this->semStack[$stackPos-(6-4)], $this->startAttributeStack[$stackPos-(6-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(6-2)], $this->semStack[$stackPos-(6-4)], $this->startAttributeStack[$stackPos-(6-1)] + $this->endAttributes);/*LABEL_150*/
             },
             155 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl($this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_151*/
             },
             156 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_152*/
             },
             157 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_153*/
             },
             158 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes); $this->scope->enumdef($this->semStack[$stackPos-(3-1)], $this->semValue);
+                $this->semValue = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$stackPos-(3-1)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes); $this->scope->enumdef($this->semStack[$stackPos-(3-1)], $this->semValue);/*LABEL_154*/
             },
             159 => function ($stackPos) {
-                $this->semValue = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes); $this->scope->enumdef($this->semStack[$stackPos-(1-1)], $this->semValue);
+                $this->semValue = new Node\Decl\NamedDecl\ValueDecl\EnumConstantDecl($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes); $this->scope->enumdef($this->semStack[$stackPos-(1-1)], $this->semValue);/*LABEL_155*/
             },
             160 => function ($stackPos) {
-                throw new Error('atomic type_name not implemented');
+                throw new Error('atomic type_name not implemented');/*LABEL_156*/
             },
             161 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_CONST;
+                $this->semValue = Node\Decl::KIND_CONST;/*LABEL_157*/
             },
             162 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_RESTRICT;
+                $this->semValue = Node\Decl::KIND_RESTRICT;/*LABEL_158*/
             },
             163 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_VOLATILE;
+                $this->semValue = Node\Decl::KIND_VOLATILE;/*LABEL_159*/
             },
             164 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_ATOMIC;
+                $this->semValue = Node\Decl::KIND_ATOMIC;/*LABEL_160*/
             },
             165 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_INLINE;
+                $this->semValue = Node\Decl::KIND_INLINE;/*LABEL_161*/
             },
             166 => function ($stackPos) {
-                $this->semValue = Node\Decl::KIND_NORETURN;
+                $this->semValue = Node\Decl::KIND_NORETURN;/*LABEL_162*/
             },
             167 => function ($stackPos) {
-                throw new Error('alignas type_name not implemented');
+                throw new Error('alignas type_name not implemented');/*LABEL_163*/
             },
             168 => function ($stackPos) {
-                throw new Error('alignas constant_expression not implemented');
+                throw new Error('alignas constant_expression not implemented');/*LABEL_164*/
             },
             169 => function ($stackPos) {
-                $this->semValue = new IR\Declarator($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\Declarator($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_165*/
             },
             170 => function ($stackPos) {
-                $this->semValue = new IR\Declarator(null, $this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\Declarator(null, $this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_166*/
             },
             171 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\Identifier($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\Identifier($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_167*/
             },
             172 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\Declarator($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\Declarator($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_168*/
             },
             173 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\IncompleteArray($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\IncompleteArray($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_169*/
             },
             174 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\IncompleteArray($this->semStack[$stackPos-(4-1)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\IncompleteArray($this->semStack[$stackPos-(4-1)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_170*/
             },
             175 => function ($stackPos) {
-                throw new Error('direct_declarator bracket static type_qualifier_list assignment_expression not implemented');
+                throw new Error('direct_declarator bracket static type_qualifier_list assignment_expression not implemented');/*LABEL_171*/
             },
             176 => function ($stackPos) {
-                throw new Error('direct_declarator bracket static assignment_expression not implemented');
+                throw new Error('direct_declarator bracket static assignment_expression not implemented');/*LABEL_172*/
             },
             177 => function ($stackPos) {
-                throw new Error('direct_declarator bracket type_qualifier_list star not implemented');
+                throw new Error('direct_declarator bracket type_qualifier_list star not implemented');/*LABEL_173*/
             },
             178 => function ($stackPos) {
-                throw new Error('direct_declarator bracket type_qualifier_list static assignment_expression not implemented');
+                throw new Error('direct_declarator bracket type_qualifier_list static assignment_expression not implemented');/*LABEL_174*/
             },
             179 => function ($stackPos) {
-                throw new Error('direct_declarator bracket type_qualifier_list assignment_expression not implemented');
+                throw new Error('direct_declarator bracket type_qualifier_list assignment_expression not implemented');/*LABEL_175*/
             },
             180 => function ($stackPos) {
-                throw new Error('direct_declarator bracket type_qualifier_list not implemented');
+                throw new Error('direct_declarator bracket type_qualifier_list not implemented');/*LABEL_176*/
             },
             181 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\CompleteArray($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\CompleteArray($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_177*/
             },
             182 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\Function_($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)][0], $this->semStack[$stackPos-(4-3)][1], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\Function_($this->semStack[$stackPos-(4-1)], $this->semStack[$stackPos-(4-3)][0], $this->semStack[$stackPos-(4-3)][1], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_178*/
             },
             183 => function ($stackPos) {
-                $this->semValue = new IR\DirectDeclarator\Function_($this->semStack[$stackPos-(3-1)], [], false, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectDeclarator\Function_($this->semStack[$stackPos-(3-1)], [], false, $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_179*/
             },
             184 => function ($stackPos) {
-                throw new Error('direct_declarator params identifier list not implemented');
+                throw new Error('direct_declarator params identifier list not implemented');/*LABEL_180*/
             },
             185 => function ($stackPos) {
-                $this->semValue = new IR\QualifiedPointer($this->semStack[$stackPos-(3-2)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\QualifiedPointer($this->semStack[$stackPos-(3-2)], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_181*/
             },
             186 => function ($stackPos) {
-                $this->semValue = new IR\QualifiedPointer($this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\QualifiedPointer($this->semStack[$stackPos-(2-2)], null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_182*/
             },
             187 => function ($stackPos) {
-                $this->semValue = new IR\QualifiedPointer(0, $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\QualifiedPointer(0, $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_183*/
             },
             188 => function ($stackPos) {
-                $this->semValue = new IR\QualifiedPointer(0, null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\QualifiedPointer(0, null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_184*/
             },
             189 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_185*/
             },
             190 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-1)] | $this->semStack[$stackPos-(2-2)];
+                $this->semValue = $this->semStack[$stackPos-(2-1)] | $this->semStack[$stackPos-(2-2)];/*LABEL_186*/
             },
             191 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(3-1)], true];
+                $this->semValue = [$this->semStack[$stackPos-(3-1)], true];/*LABEL_187*/
             },
             192 => function ($stackPos) {
-                $this->semValue = [$this->semStack[$stackPos-(1-1)], false];
+                $this->semValue = [$this->semStack[$stackPos-(1-1)], false];/*LABEL_188*/
             },
             193 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_189*/
             },
             194 => function ($stackPos) {
-                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];
+                $this->semStack[$stackPos-(3-1)][] = $this->semStack[$stackPos-(3-3)]; $this->semValue = $this->semStack[$stackPos-(3-1)];/*LABEL_190*/
             },
             195 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileParamVarDeclaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileParamVarDeclaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_191*/
             },
             196 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileParamAbstractDeclaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileParamAbstractDeclaration($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_192*/
             },
             197 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileParamAbstractDeclaration($this->semStack[$stackPos-(1-1)][0], $this->semStack[$stackPos-(1-1)][1], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileParamAbstractDeclaration($this->semStack[$stackPos-(1-1)][0], $this->semStack[$stackPos-(1-1)][1], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_193*/
             },
             198 => function ($stackPos) {
-                throw new Error('identifier_list identifier not implemented');
+                throw new Error('identifier_list identifier not implemented');/*LABEL_194*/
             },
             199 => function ($stackPos) {
-                throw new Error('identifier_list identifier_list identifier not implemented');
+                throw new Error('identifier_list identifier_list identifier not implemented');/*LABEL_195*/
             },
             200 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileTypeReference($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileTypeReference($this->semStack[$stackPos-(2-1)][0], $this->semStack[$stackPos-(2-1)][1], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_196*/
             },
             201 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileTypeReference($this->semStack[$stackPos-(1-1)][0], $this->semStack[$stackPos-(1-1)][1], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileTypeReference($this->semStack[$stackPos-(1-1)][0], $this->semStack[$stackPos-(1-1)][1], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_197*/
             },
             202 => function ($stackPos) {
-                $this->semValue = new IR\AbstractDeclarator($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\AbstractDeclarator($this->semStack[$stackPos-(2-1)], $this->semStack[$stackPos-(2-2)], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_198*/
             },
             203 => function ($stackPos) {
-                $this->semValue = new IR\AbstractDeclarator($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\AbstractDeclarator($this->semStack[$stackPos-(1-1)], null, $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_199*/
             },
             204 => function ($stackPos) {
-                $this->semValue = new IR\AbstractDeclarator(null, $this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new IR\AbstractDeclarator(null, $this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_200*/
             },
             205 => function ($stackPos) {
-                $this->semValue = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_201*/
             },
             206 => function ($stackPos) {
-                $this->semValue = new IR\DirectAbstractDeclarator\IncompleteArray($this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new IR\DirectAbstractDeclarator\IncompleteArray($this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_202*/
             },
             207 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket star not implemented');
+                throw new Error('direct_abstract_declarator bracket star not implemented');/*LABEL_203*/
             },
             208 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket static type qualifier list assignment not implemented');
+                throw new Error('direct_abstract_declarator bracket static type qualifier list assignment not implemented');/*LABEL_204*/
             },
             209 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket static assignment not implemented');
+                throw new Error('direct_abstract_declarator bracket static assignment not implemented');/*LABEL_205*/
             },
             210 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket type qualifier list static assignment not implemented');
+                throw new Error('direct_abstract_declarator bracket type qualifier list static assignment not implemented');/*LABEL_206*/
             },
             211 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket type qualifier list assignment not implemented');
+                throw new Error('direct_abstract_declarator bracket type qualifier list assignment not implemented');/*LABEL_207*/
             },
             212 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket type qualifier list not implemented');
+                throw new Error('direct_abstract_declarator bracket type qualifier list not implemented');/*LABEL_208*/
             },
             213 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator bracket assignment_expr not implemented');
+                throw new Error('direct_abstract_declarator bracket assignment_expr not implemented');/*LABEL_209*/
             },
             214 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket not implemented');
+                throw new Error('direct_abstract_declarator with bracket not implemented');/*LABEL_210*/
             },
             215 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket star not implemented');
+                throw new Error('direct_abstract_declarator with bracket star not implemented');/*LABEL_211*/
             },
             216 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket static type qualifier list assignment not implemented');
+                throw new Error('direct_abstract_declarator with bracket static type qualifier list assignment not implemented');/*LABEL_212*/
             },
             217 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket static assignment not implemented');
+                throw new Error('direct_abstract_declarator with bracket static assignment not implemented');/*LABEL_213*/
             },
             218 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket type qualifier list assignment not implemented');
+                throw new Error('direct_abstract_declarator with bracket type qualifier list assignment not implemented');/*LABEL_214*/
             },
             219 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket type qualifier list static asssignment not implemented');
+                throw new Error('direct_abstract_declarator with bracket type qualifier list static asssignment not implemented');/*LABEL_215*/
             },
             220 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket type qualifier list not implemented');
+                throw new Error('direct_abstract_declarator with bracket type qualifier list not implemented');/*LABEL_216*/
             },
             221 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with bracket assignment_expr not implemented');
+                throw new Error('direct_abstract_declarator with bracket assignment_expr not implemented');/*LABEL_217*/
             },
             222 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator empty parameter list not implemented');
+                throw new Error('direct_abstract_declarator empty parameter list not implemented');/*LABEL_218*/
             },
             223 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator parameter list not implemented');
+                throw new Error('direct_abstract_declarator parameter list not implemented');/*LABEL_219*/
             },
             224 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with empty parameter list not implemented');
+                throw new Error('direct_abstract_declarator with empty parameter list not implemented');/*LABEL_220*/
             },
             225 => function ($stackPos) {
-                throw new Error('direct_abstract_declarator with parameter list not implemented');
+                throw new Error('direct_abstract_declarator with parameter list not implemented');/*LABEL_221*/
             },
             226 => function ($stackPos) {
-                throw new Error('initializer brackend no trailing not implemented');
+                throw new Error('initializer brackend no trailing not implemented');/*LABEL_222*/
             },
             227 => function ($stackPos) {
-                throw new Error('initializer brackeded trailing not implemented');
+                throw new Error('initializer brackeded trailing not implemented');/*LABEL_223*/
             },
             228 => function ($stackPos) {
-                throw new Error('initializer assignment_expression not implemented');
+                throw new Error('initializer assignment_expression not implemented');/*LABEL_224*/
             },
             229 => function ($stackPos) {
-                throw new Error('initializer_list designator initializer not implemented');
+                throw new Error('initializer_list designator initializer not implemented');/*LABEL_225*/
             },
             230 => function ($stackPos) {
-                throw new Error('initializer_list initializer not implemented');
+                throw new Error('initializer_list initializer not implemented');/*LABEL_226*/
             },
             231 => function ($stackPos) {
-                throw new Error('initializer_list initializer_list designator initializer not implemented');
+                throw new Error('initializer_list initializer_list designator initializer not implemented');/*LABEL_227*/
             },
             232 => function ($stackPos) {
-                throw new Error('initializer_list initializer_list initializer not implemented');
+                throw new Error('initializer_list initializer_list initializer not implemented');/*LABEL_228*/
             },
             233 => function ($stackPos) {
                 $this->semValue = $this->semStack[$stackPos];
             },
             234 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_229*/
             },
             235 => function ($stackPos) {
-                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];
+                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];/*LABEL_230*/
             },
             236 => function ($stackPos) {
-                throw new Error('[] designator not implemented');
+                throw new Error('[] designator not implemented');/*LABEL_231*/
             },
             237 => function ($stackPos) {
-                throw new Error('. designator not implemented');
+                throw new Error('. designator not implemented');/*LABEL_232*/
             },
             238 => function ($stackPos) {
-                throw new Error('static assert declaration not implemented');
+                throw new Error('static assert declaration not implemented');/*LABEL_233*/
             },
             239 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_234*/
             },
             240 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_235*/
             },
             241 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_236*/
             },
             242 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_237*/
             },
             243 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_238*/
             },
             244 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_239*/
             },
             245 => function ($stackPos) {
-                throw new Error('labeled_statement identifier not implemented');
+                throw new Error('labeled_statement identifier not implemented');/*LABEL_240*/
             },
             246 => function ($stackPos) {
-                throw new Error('labeled_statement case not implemented');
+                throw new Error('labeled_statement case not implemented');/*LABEL_241*/
             },
             247 => function ($stackPos) {
-                throw new Error('labeled_statement default not implemented');
+                throw new Error('labeled_statement default not implemented');/*LABEL_242*/
             },
             248 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\CompoundStmt([], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\CompoundStmt([], $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_243*/
             },
             249 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\CompoundStmt($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\CompoundStmt($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_244*/
             },
             250 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_245*/
             },
             251 => function ($stackPos) {
-                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];
+                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];/*LABEL_246*/
             },
             252 => function ($stackPos) {
-                throw new Error('block_item declaration not implemented');
+                throw new Error('block_item declaration not implemented');/*LABEL_247*/
             },
             253 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_248*/
             },
             254 => function ($stackPos) {
-                $this->semValue = null;
+                $this->semValue = null;/*LABEL_249*/
             },
             255 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-1)];
+                $this->semValue = $this->semStack[$stackPos-(2-1)];/*LABEL_250*/
             },
             256 => function ($stackPos) {
-                throw new Error('if else not implemented');
+                throw new Error('if else not implemented');/*LABEL_251*/
             },
             257 => function ($stackPos) {
-                throw new Error('if not implemented');
+                throw new Error('if not implemented');/*LABEL_252*/
             },
             258 => function ($stackPos) {
-                throw new Error('switch not implemented');
+                throw new Error('switch not implemented');/*LABEL_253*/
             },
             259 => function ($stackPos) {
-                throw new Error('iteration 0 not implemented');
+                throw new Error('iteration 0 not implemented');/*LABEL_254*/
             },
             260 => function ($stackPos) {
-                throw new Error('iteration 1 not implemented');
+                throw new Error('iteration 1 not implemented');/*LABEL_255*/
             },
             261 => function ($stackPos) {
-                throw new Error('iteration 2 not implemented');
+                throw new Error('iteration 2 not implemented');/*LABEL_256*/
             },
             262 => function ($stackPos) {
-                throw new Error('iteration 3 not implemented');
+                throw new Error('iteration 3 not implemented');/*LABEL_257*/
             },
             263 => function ($stackPos) {
-                throw new Error('iteration 4 not implemented');
+                throw new Error('iteration 4 not implemented');/*LABEL_258*/
             },
             264 => function ($stackPos) {
-                throw new Error('iteration 5 not implemented');
+                throw new Error('iteration 5 not implemented');/*LABEL_259*/
             },
             265 => function ($stackPos) {
-                throw new Error('goto identifier not implemented');
+                throw new Error('goto identifier not implemented');/*LABEL_260*/
             },
             266 => function ($stackPos) {
-                throw new Error('continue not implemented');
+                throw new Error('continue not implemented');/*LABEL_261*/
             },
             267 => function ($stackPos) {
-                throw new Error('break not implemented');
+                throw new Error('break not implemented');/*LABEL_262*/
             },
             268 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ReturnStmt(null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\ReturnStmt(null, $this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_263*/
             },
             269 => function ($stackPos) {
-                $this->semValue = new Node\Stmt\ReturnStmt($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = new Node\Stmt\ReturnStmt($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_264*/
             },
             270 => function ($stackPos) {
-                $this->semValue = new Node\TranslationUnitDecl($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = new Node\TranslationUnitDecl($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_265*/
             },
             271 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(2-1)]; $this->semValue->addDecl(...$this->semStack[$stackPos-(2-2)]);
+                $this->semValue = $this->semStack[$stackPos-(2-1)]; $this->semValue->addDecl(...$this->semStack[$stackPos-(2-2)]);/*LABEL_266*/
             },
             272 => function ($stackPos) {
-                $this->semValue = $this->semStack[$stackPos-(1-1)];
+                $this->semValue = $this->semStack[$stackPos-(1-1)];/*LABEL_267*/
             },
             273 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileExternalDeclaration($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileExternalDeclaration($this->semStack[$stackPos-(1-1)], $this->startAttributeStack[$stackPos-(1-1)] + $this->endAttributes);/*LABEL_268*/
             },
             274 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileFunction($this->semStack[$stackPos-(4-1)][0], $this->semStack[$stackPos-(4-1)][1], $this->semStack[$stackPos-(4-2)], $this->semStack[$stackPos-(4-3)], $this->semStack[$stackPos-(4-4)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileFunction($this->semStack[$stackPos-(4-1)][0], $this->semStack[$stackPos-(4-1)][1], $this->semStack[$stackPos-(4-2)], $this->semStack[$stackPos-(4-3)], $this->semStack[$stackPos-(4-4)], $this->startAttributeStack[$stackPos-(4-1)] + $this->endAttributes);/*LABEL_269*/
             },
             275 => function ($stackPos) {
-                $this->semValue = $this->compiler->compileFunction($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1], $this->semStack[$stackPos-(3-2)], [], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);
+                $this->semValue = $this->compiler->compileFunction($this->semStack[$stackPos-(3-1)][0], $this->semStack[$stackPos-(3-1)][1], $this->semStack[$stackPos-(3-2)], [], $this->semStack[$stackPos-(3-3)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_270*/
             },
             276 => function ($stackPos) {
-                $this->semValue = array($this->semStack[$stackPos-(1-1)]);
+                $this->semValue = array($this->semStack[$stackPos-(1-1)]);/*LABEL_271*/
             },
             277 => function ($stackPos) {
-                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];
+                $this->semStack[$stackPos-(2-1)][] = $this->semStack[$stackPos-(2-2)]; $this->semValue = $this->semStack[$stackPos-(2-1)];/*LABEL_272*/
             },
         ];
     }
