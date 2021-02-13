@@ -29,6 +29,7 @@ class ParserTest extends TestCase {
     gdouble dummy;
   } unused;
 };';
+
     protected function setUp()
     {
         $this->context = new \Zend\C\Engine\Context;
@@ -39,6 +40,28 @@ class ParserTest extends TestCase {
         $tokens = $this->preprocessor->process(__DIR__ . '/../data/config.h');
         $this->parser->parse($tokens, $this->context);
     }
+
+    public function testTypedefParser() {
+        $data_filename = __DIR__.'/data/typedef-gboolean.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+        $types = $this->parser->getTypes();
+        $keys = array_keys($types);
+        print_r($keys);
+
+        /*
+        $printer = new PhpPrinter;
+        $actual = array();
+        $printer->print($ast, $actual);
+
+        $expected = include __DIR__.'/expect/typedef-gboolean.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        */
+        $this->assertTrue(True);
+    }
+
     public function testUnionParser() {
         $data_filename = __DIR__.'/data/union-GMutex.h';
         $tokens = $this->preprocessor->process($data_filename);

@@ -96,6 +96,9 @@ abstract class ParserAbstract
         $this->compiler = new Compiler;
         $this->initReduceCallbacks();
     }
+    public function getTypes(): array {
+        return $this->scope->getTypes();
+    }
 
     public function parse(array $tokens, Context $context) {
         $this->scope = $context->scope;

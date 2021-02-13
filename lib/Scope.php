@@ -42,6 +42,10 @@ class Scope {
         $this->parent = $parent;
     }
 
+    public function getTypes(): array {
+        return $this->types;
+    }
+
     public function typedef(string $identifier, Node\Type $type): void {
         $this->entries[$identifier] = Tokens::T_TYPEDEF_NAME;
         $this->types[$identifier] = $type;
