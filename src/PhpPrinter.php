@@ -98,16 +98,6 @@ class PhpPrinter
         $this->level--;
     }
 
-    /*protected function printEnum(Dec $node, &$array) {
-        $array['name'] = ''.$node->name;
-        $array['type'] = 'enum';
-        $constants = array();
-        foreach ($node->fields as $field) {
-            $constant  = array('name'=>$field->name);
-            $this->printType($field, $constant);
-            $array['members'][$field->name] = $constant;
-        }
-    }*/
     protected function printStruct(Decl $node, &$array) {
         $array['name'] = ''.$node->name;
         $array['type'] = 'struct';
@@ -165,7 +155,6 @@ class PhpPrinter
             );
             // TODO: $this->printExpr($node->size);
             $array['size']=$node->size->value;// $this->printExpr($type->size)
-            // in Printer\C it's called attributed...
             //$array['modifier']='*';
             //$array['qualifier']= 'const';
         } else if ($node instanceof Type\TagType\RecordType) {
@@ -173,8 +162,38 @@ class PhpPrinter
         } else if ($node instanceof Type\TagType\EnumType) {
             $this->printDecl($node->decl, $array);
         } else if ($node instanceof Type\PointerType) {
-            $array['type']= $node->parent->name;
-            $array['modifier']= '*';
+            $parent = $node;
+            $modifier='*';
+            while(isset($parent->parent)) {
+                $parent = $parent->parent;
+                if ($parent  instanceof Type\PointerType) {
+                    $modifier .='*';
+                }
+            }
+            if ($parent instanceof Type\FunctionType\FunctionProtoType) {
+                $array['type']= 'function';
+                $return=array();
+                $this->printType($parent->return, $return);
+                $parameters=array();
+                foreach ($parent->params as $idx => $param) {
+                    $parameter=array();
+                    //for($parent_param = $param; isset($parent_param->parent); $parent_param = $parent_param->parent);
+                    $name_param = $parent->paramNames[$idx];
+                    $parameter['name']=$name_param;
+                    $this->printType($param, $parameter);
+                    $parameters[$name_param]=$parameter;
+                }
+                if ($parent->isVariadic) {
+                    $parameters[]='...';
+                }
+                $array['signature']= array(
+                    'return'=>$return,
+                    'parameters'=>$parameters
+                );
+            } else {
+                $array['type']= $parent->name;
+            }
+            $array['modifier']= $modifier;
         } else {
             echo get_class($node)."\n";
             echo "Error 55: Not implemented\n";
@@ -326,3 +345,4 @@ class PhpPrinter
         }
     }
 }
+
