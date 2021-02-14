@@ -21,14 +21,6 @@ use PHPUnit\Framework\TestCase;
  *
  */
 class ParserTest extends TestCase {
-    const EXPECTED = 'struct _GStaticRecMutex {
-  GStaticMutex mutex;
-  guint depth;
-  union {
-    pthread_t owner;
-    gdouble dummy;
-  } unused;
-};';
 
     protected function setUp()
     {
@@ -46,15 +38,28 @@ class ParserTest extends TestCase {
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 
-        $types = $this->parser->getTypes();
+        /*$types = $this->parser->getTypes();
         $keys = array_keys($types);
-        print_r($keys);
+        print_r($keys);*/
 
         /*
-        $printer = new PhpPrinter;
-        $actual = array();
-        $printer->print($ast, $actual);
+        $expected = include __DIR__.'/expect/typedef-gboolean.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        */
+        $this->assertTrue(True);
+    }
 
+    public function testMacroParser() {
+        $data_filename = __DIR__.'/data/macro-alloca.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        //$ast = $this->parser->parse($tokens, $this->context);
+
+        /*$types = $this->parser->getTypes();
+        $keys = array_keys($types);
+        print_r($keys);*/
+
+        /*
         $expected = include __DIR__.'/expect/typedef-gboolean.php';
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected===$actual);
@@ -113,6 +118,7 @@ class ParserTest extends TestCase {
 
     public function testStructParser() {
         $data_filename = __DIR__.'/data/struct-GStaticRecMutex.h';
+        $data_filename = '/home/dev/Projects/gtkphp/zend-ext/tmp/GArray.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 

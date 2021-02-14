@@ -102,6 +102,7 @@ class PhpPrinter
         $array['name'] = ''.$node->name;
         $array['type'] = 'struct';
         $members = array();
+        if (!empty($node->fields))
         foreach ($node->fields as $field) {
             $member  = array('name'=>$field->name);
             $this->printType($field->type, $member);
@@ -163,6 +164,7 @@ class PhpPrinter
             $this->printDecl($node->decl, $array);
         } else if ($node instanceof Type\PointerType) {
             $parent = $node;
+            //var_dump($node);
             $modifier='*';
             while(isset($parent->parent)) {
                 $parent = $parent->parent;
@@ -191,7 +193,11 @@ class PhpPrinter
                     'parameters'=>$parameters
                 );
             } else {
-                $array['type']= $parent->name;
+                if (isset($parent->name)) {//Node\Type\BuiltinType
+                    $array['type']= $parent->name;
+                } else if (True) {// parent == Node\Type\TagType\RecordType
+                    $array['type']= $parent->decl->name;
+                }
             }
             $array['modifier']= $modifier;
         } else {
