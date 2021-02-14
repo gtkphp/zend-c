@@ -33,3 +33,16 @@ typedef void GStaticMutex;
 #define GLIB_SYSDEF_POLLHUP =16
 #define GLIB_SYSDEF_POLLERR =8
 #define GLIB_SYSDEF_POLLNVAL =32
+
+typedef int GIOStatus;
+/*typedef int GIOFlags;*/
+typedef int GIOChannel;
+typedef int gsize;
+typedef int GError;
+typedef int GSeekType;
+typedef int GSource;
+typedef int GIOCondition;
+
+
+
+

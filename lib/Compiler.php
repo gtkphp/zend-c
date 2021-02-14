@@ -125,11 +125,15 @@ restart:
             $types[0] = new Type\BuiltinType($first->name . ' ' . $types[0]->name, $first->getAttributes());
             goto restart;
         } elseif ($types[0] instanceof Type\TypedefType && $types[1] instanceof Type\TypedefType) {
+            $first = array_shift($types);
+            $types[0] = new Type\TypedefType($first->name . ' ' . $types[0]->name, $first->getAttributes());
+            goto restart;
+        } elseif ($types[0] instanceof Type\TagType\EnumType && $types[1] instanceof Type\TypedefType) {
             //var_dump($types);// gint, gboolean
             $first = array_shift($types);
             //var_dump($types);//(gboolean)
             //var_dump($first);//gint
-            $types[0] = new Type\TypedefType($first->name . ' ' . $types[0]->name, $first->getAttributes());
+            $types[0] = new Type\TypedefType('enum _' . $types[0]->name .' '. $types[0]->name, $first->getAttributes());
             goto restart;
         }
         var_dump($types);
@@ -251,3 +255,4 @@ restart_direct:
         return $result;
     }
 }
+

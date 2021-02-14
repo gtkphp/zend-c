@@ -41,7 +41,7 @@ enumeration_constant        /* before it has been defined as such */
     ;
 
 string
-    : STRING_LITERAL        { $$ = new Node\Stmt\ValueStmt\Expr($this->semStack[$1]); /*throw new Error('string_literal not implemented');*/ }
+    : STRING_LITERAL        { throw new Error('string_literal not implemented'); /*$this->semValue = new Node\Stmt\ValueStmt\Expr\StringLiteral($this->semStack[$stackPos-(1-1)]);*/ }
     | FUNC_NAME             { throw new Error('func name not implemented');/*LABEL_9*/ }
     ;
 
