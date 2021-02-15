@@ -29,8 +29,8 @@ class ParserTest extends TestCase {
         $this->parser = new \Zend\C\ExpressionParser($lexer);
 
         $this->preprocessor = new PreProcessor($this->context);
-        $tokens = $this->preprocessor->process(__DIR__ . '/../data/config.h');
-        $this->parser->parse($tokens, $this->context);
+        //$tokens = $this->preprocessor->process(__DIR__ . '/../data/config.h');
+        //$this->parser->parse($tokens, $this->context);
     }
 
     public function testTypedefParser() {
@@ -88,7 +88,8 @@ class ParserTest extends TestCase {
     {
         return [
 #            ['struct', 'GStaticRecMutex'],
-            ['struct', 'GDate'],
+#            ['struct', 'GDate'],
+            ['struct', 'GIOFuncs'],
 #            ['struct', 'GArray']
         ];
     }
@@ -98,6 +99,8 @@ class ParserTest extends TestCase {
      */
     function testStructsParser($type, $name) {
         $printer = new PhpPrinter;
+        $tokens = $this->preprocessor->process(__DIR__ . '/../data/config-GIOFuncs.h');
+        $this->parser->parse($tokens, $this->context);
 
         $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
         $tokens = $this->preprocessor->process($data_filename);
@@ -118,7 +121,7 @@ class ParserTest extends TestCase {
 
     public function testStructParser() {
         $data_filename = __DIR__.'/data/struct-GStaticRecMutex.h';
-        $data_filename = '/home/dev/Projects/gtkphp/zend-ext/tmp/GArray.h';
+        //$data_filename = '/home/dev/Projects/gtkphp/zend-ext/tmp/GArray.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 

@@ -5,7 +5,7 @@ struct _GIOFuncs
 				  gsize         count,
 				  gsize        *bytes_read,
 				  GError      **err);
-  /*GIOStatus (*io_write)          (GIOChannel   *channel,
+  GIOStatus (*io_write)          (GIOChannel   *channel,
 				  const gchar  *buf,
 				  gsize         count,
 				  gsize        *bytes_written,
@@ -22,5 +22,5 @@ struct _GIOFuncs
   GIOStatus  (*io_set_flags)     (GIOChannel   *channel,
                                   GIOFlags      flags,
 				  GError      **err);
-  GIOFlags   (*io_get_flags)     (GIOChannel   *channel);*/
+  GIOFlags   (*io_get_flags)     (GIOChannel   *channel);
 };

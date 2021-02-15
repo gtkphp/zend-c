@@ -1,0 +1,10 @@
+typedef enum _GIOStatus GIOStatus;
+typedef struct _GIOChannel	GIOChannel;
+typedef char   gchar;
+typedef unsigned long gsize;
+typedef struct _GError GError;
+typedef signed long gint64;
+typedef enum _GSeekType GSeekType;
+typedef struct _GSource                 GSource;
+typedef enum _GIOCondition GIOCondition;
+typedef enum _GIOFlags GIOFlags;
