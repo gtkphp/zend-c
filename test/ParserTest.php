@@ -34,6 +34,9 @@ class ParserTest extends TestCase {
     }
 
     public function testTypedefParser() {
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-gboolean.h');
+        $this->parser->parse($tokens, $this->context);
+
         $data_filename = __DIR__.'/data/typedef-gboolean.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
@@ -68,6 +71,9 @@ class ParserTest extends TestCase {
     }
 
     public function testUnionParser() {
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GMutex.h');
+        $this->parser->parse($tokens, $this->context);
+
         $data_filename = __DIR__.'/data/union-GMutex.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
@@ -120,8 +126,10 @@ class ParserTest extends TestCase {
     }
 
     public function testStructParser() {
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GStaticRecMutex.h');
+        $this->parser->parse($tokens, $this->context);
+
         $data_filename = __DIR__.'/data/struct-GStaticRecMutex.h';
-        //$data_filename = '/home/dev/Projects/gtkphp/zend-ext/tmp/GArray.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 
@@ -132,6 +140,29 @@ class ParserTest extends TestCase {
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected===$actual);
         /*
+        $actual = $printer->evaluate();
+        */
+
+        $this->assertTrue(True);
+    }
+
+    public function testFunctionDeclParser() {
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GHashTable.h');
+        $this->parser->parse($tokens, $this->context);
+
+        $data_filename = __DIR__.'/data/func-GHashTable.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+        $printer = new PhpPrinter;
+        $printer->print($ast, $actual);
+
+        print_r($actual);
+
+        /*
+        $expected = include __DIR__.'/expect/func-GHashTable.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
         $actual = $printer->evaluate();
         */
 
