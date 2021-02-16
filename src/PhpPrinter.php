@@ -27,6 +27,13 @@ class PhpPrinter
         } elseif ($node instanceof Decl) {
             $this->printDecl($node, $array);
             return;
+        } elseif ($node instanceof Type\PointerType) {
+            $this->printType($node, $array);
+            return ;
+        } else {
+            var_dump($node);
+            echo "Not implemented\n";
+            return ;
         }/* elseif ($node instanceof Expr) {
             return $this->printExpr($node);
         } elseif ($node instanceof Stmt) {
@@ -62,9 +69,7 @@ class PhpPrinter
                     $array['typedefs'][$node->name] = $typedef;
                     break;
             }
-            return;
-        }
-        if ($node instanceof RecordDecl) {
+        } else  if ($node instanceof RecordDecl) {
             if ($node->kind==RecordDecl::KIND_UNION) {
                 if ($this->level>1) {
                     $this->printUnion($node, $array);
@@ -84,9 +89,7 @@ class PhpPrinter
             } else {
                 echo "Error 44 : not implemented\n";
             }
-            return;
-        }
-        if ($node instanceof EnumDecl) {
+        } else if ($node instanceof EnumDecl) {
             if ($this->level>1) {
                 $this->printEnum($node, $array);
             } else {
@@ -94,7 +97,19 @@ class PhpPrinter
                 $this->printEnum($node, $enum);
                 $array['unions'][$node->name] = $enum;
             }
+        } else if ($node instanceof Decl\NamedDecl\ValueDecl\DeclaratorDecl\FunctionDecl) {
+            if ($this->level>1) {
+                $this->printType($node->type, $array);
+            } else {
+                $func = array('name'=>$node->name);
+                $this->printType($node->type, $func);
+                $array['functions'][$node->name] = $func;
+            }
+        } else {
+            var_dump($node);
+            echo "Not implemented\n";
         }
+
         $this->level--;
     }
 
@@ -169,10 +184,14 @@ class PhpPrinter
             while(isset($parent->parent)) {
                 $parent = $parent->parent;
                 if ($parent  instanceof Type\PointerType) {
-                    $modifier .='*';
+                    $modifier .= '*';
+                } else {
+                    break;
                 }
             }
             if ($parent instanceof Type\FunctionType\FunctionProtoType) {
+                $this->printType($parent, $array);
+                /*
                 $array['type']= 'function';
                 $return=array();
                 $this->printType($parent->return, $return);
@@ -192,14 +211,39 @@ class PhpPrinter
                     'return'=>$return,
                     'parameters'=>$parameters
                 );
+                */
             } else {
-                if (isset($parent->name)) {//Node\Type\BuiltinType
+                if($parent instanceof Type\ParenType) {
+                    $this->printType($parent->parent, $array);
+                } elseif (isset($parent->name)) {//Node\Type\BuiltinType
                     $array['type']= $parent->name;
                 } else if (True) {// parent == Node\Type\TagType\RecordType
                     $array['type']= $parent->decl->name;
                 }
             }
             $array['modifier']= $modifier;
+        } else if ($node instanceof Type\AttributedType) {
+            $this->printType($node->parent, $array);
+        } elseif ($node instanceof Type\FunctionType\FunctionProtoType) {
+            $array['type']= 'function';
+            $return=array();
+            $this->printType($node->return, $return);
+            $parameters=array();
+            foreach ($node->params as $idx => $param) {
+                $parameter=array();
+                //for($parent_param = $param; isset($parent_param->parent); $parent_param = $parent_param->parent);
+                $name_param = $node->paramNames[$idx];
+                $parameter['name']=$name_param;
+                $this->printType($param, $parameter);
+                $parameters[$name_param]=$parameter;
+            }
+            if ($node->isVariadic) {
+                $parameters[]='...';
+            }
+            $array['signature']= array(
+                'return'=>$return,
+                'parameters'=>$parameters
+            );
         } else {
             echo get_class($node)."\n";
             echo "Error 55: Not implemented\n";
