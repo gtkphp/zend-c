@@ -12,7 +12,7 @@ return array(
                 'data' => array(
                     'name' => 'data',
                     'type' => 'gchar',
-                    'modifier' => '*'
+                    'pass' => '*'
                 ),
                 'len' => array(
                     'name' => 'len',

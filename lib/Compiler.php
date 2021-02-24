@@ -119,20 +119,30 @@ restart:
             // combine in order
             $first = array_shift($types);
             $types[0] = new Type\BuiltinType($first->name . ' ' . $types[0]->name, $first->getAttributes());
+            //echo "1:".$first->name.PHP_EOL;
             goto restart;
         } elseif ($types[0] instanceof Type\BuiltinType && $types[1] instanceof Type\TypedefType) {
             $first = array_shift($types);
             $types[0] = new Type\BuiltinType($first->name . ' ' . $types[0]->name, $first->getAttributes());
+            //echo "2:".$first->name.PHP_EOL;
             goto restart;
         } elseif ($types[0] instanceof Type\TypedefType && $types[1] instanceof Type\TypedefType) {
             $first = array_shift($types);
             $types[0] = new Type\TypedefType($first->name . ' ' . $types[0]->name, $first->getAttributes());
+            //echo "3:".$first->name.PHP_EOL;
+            goto restart;
+        } elseif ($types[0] instanceof Type\TagType\RecordType && $types[1] instanceof Type\TypedefType) {
+            $first = array_shift($types);
+            // maybe add 'struct '
+            $types[0] = new Type\TypedefType('struct '.$first->decl->name . ' ' . $types[0]->name, $first->getAttributes());
+            //echo "4:".$first->decl->name.PHP_EOL;
             goto restart;
         } elseif ($types[0] instanceof Type\TagType\EnumType && $types[1] instanceof Type\TypedefType) {
             //var_dump($types);// gint, gboolean
             $first = array_shift($types);
             //var_dump($types);//(gboolean)
             //var_dump($first);//gint
+            //echo "5:".$types[0]->name.PHP_EOL;
             $types[0] = new Type\TypedefType('enum _' . $types[0]->name .' '. $types[0]->name, $first->getAttributes());
             goto restart;
         }

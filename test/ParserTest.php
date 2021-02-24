@@ -34,10 +34,11 @@ class ParserTest extends TestCase {
     }
 
     public function testTypedefParser() {
-        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-gboolean.h');
+        //$tokens = $this->preprocessor->process(__DIR__ . '/data/config-gboolean.h');
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GDestroyNotify.h');
         $this->parser->parse($tokens, $this->context);
 
-        $data_filename = __DIR__.'/data/typedef-gboolean.h';
+        $data_filename = __DIR__.'/data/typedef-GDestroyNotify.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
 
@@ -95,8 +96,8 @@ class ParserTest extends TestCase {
         return [
 #            ['struct', 'GStaticRecMutex'],
 #            ['struct', 'GDate'],
-            ['struct', 'GIOFuncs'],
-#            ['struct', 'GArray']
+#            ['struct', 'GIOFuncs'],
+            ['struct', 'GArray']
         ];
     }
 
@@ -105,8 +106,8 @@ class ParserTest extends TestCase {
      */
     function testStructsParser($type, $name) {
         $printer = new PhpPrinter;
-        $tokens = $this->preprocessor->process(__DIR__ . '/../data/config-GIOFuncs.h');
-        $this->parser->parse($tokens, $this->context);
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-'.$name.'.h');
+        $ast = $this->parser->parse($tokens, $this->context);
 
         $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
         $tokens = $this->preprocessor->process($data_filename);
@@ -157,15 +158,12 @@ class ParserTest extends TestCase {
         $printer = new PhpPrinter;
         $printer->print($ast, $actual);
 
-        print_r($actual);
+        //print_r($actual);
+        //$actual = $printer->evaluate();
 
-        /*
         $expected = include __DIR__.'/expect/func-GHashTable.php';
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected===$actual);
-        $actual = $printer->evaluate();
-        */
-
         $this->assertTrue(True);
     }
 

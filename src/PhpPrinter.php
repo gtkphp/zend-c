@@ -16,13 +16,17 @@ class PhpPrinter
 {
     protected $level=0;
     function print(TranslationUnitDecl $node, array &$array=Null) {
-        if(!isset($array)) {
-            $array = array(/*'typedefs'=>array(), 'enums'=>array(), 'structs'=>array(), 'unions'=>array()*/);
-        }
+        if(!isset($array)) $array = array();
+        if(!isset($array['typedefs'])) $array['typedefs'] = array();
+        if(!isset($array['enums']))    $array['enums'] = array();
+        if(!isset($array['structs']))  $array['structs'] = array();
+        if(!isset($array['unions']))   $array['unions'] = array();
         $this->printNode($node, $array);
     }
     function printNode(Node $node, array &$array) {
         if ($node instanceof TranslationUnitDecl) {
+            if(empty($node->declarations))
+                return;
             return $this->printNodes($node->declarations, $array);
         } elseif ($node instanceof Decl) {
             $this->printDecl($node, $array);
@@ -171,7 +175,8 @@ class PhpPrinter
             );
             // TODO: $this->printExpr($node->size);
             $array['size']=$node->size->value;// $this->printExpr($type->size)
-            //$array['modifier']='*';
+            //$array['modifier']='unsigned';
+            //$array['pass']='*';
             //$array['qualifier']= 'const';
         } else if ($node instanceof Type\TagType\RecordType) {
             $this->printDecl($node->decl, $array);
@@ -180,11 +185,11 @@ class PhpPrinter
         } else if ($node instanceof Type\PointerType) {
             $parent = $node;
             //var_dump($node);
-            $modifier='*';
+            $pass='*';
             while(isset($parent->parent)) {
                 $parent = $parent->parent;
                 if ($parent  instanceof Type\PointerType) {
-                    $modifier .= '*';
+                    $pass .= '*';
                 } else {
                     break;
                 }
@@ -221,7 +226,7 @@ class PhpPrinter
                     $array['type']= $parent->decl->name;
                 }
             }
-            $array['modifier']= $modifier;
+            $array['pass']= $pass;
         } else if ($node instanceof Type\AttributedType) {
             $this->printType($node->parent, $array);
         } elseif ($node instanceof Type\FunctionType\FunctionProtoType) {

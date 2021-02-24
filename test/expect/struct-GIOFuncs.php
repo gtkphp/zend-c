@@ -20,12 +20,12 @@ return array(
                             'channel' => array(
                                 'name' => 'channel',
                                 'type' => 'GIOChannel',
-                                'modifier' => '*'
+                                'pass' => '*'
                             ),
                             'buf' => array(
                                 'name' => 'buf',
                                 'type' => 'gchar',
-                                'modifier' => '*'
+                                'pass' => '*'
                             ),
                             'count' => array(
                                 'name' => 'count',
@@ -34,16 +34,16 @@ return array(
                             'bytes_read' => array(
                                 'name' => 'bytes_read',
                                 'type' => 'gsize',
-                                'modifier' => '*'
+                                'pass' => '*'
                             ),
                             'err' => array(
                                 'name' => 'err',
                                 'type' => 'GError',
-                                'modifier' => '**'
+                                'pass' => '**'
                             ),
                         ),
                     ),
-                    'modifier' => '*'
+                    'pass' => '*'
                 ),
             )
         )

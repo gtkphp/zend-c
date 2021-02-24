@@ -1,20 +1,24 @@
 <?php
 
 return array(
-    'structs' => array(
-        '_GArray' => array(
-            'name' => '_GArray',
-            'type' => 'struct',
-            'members' => array
-            (
-                'data' => array(
-                    'name' => 'data',
-                    'type' => 'gchar',
-                    'modifier' => '*'
+    'functions' => Array(
+        'g_hash_table_new' => Array(
+            'name' => 'g_hash_table_new',
+            'type' => 'function',
+            'signature' => Array(
+                'return' => Array(
+                    'type' => 'GHashTable',
+                    'pass' => '*',
                 ),
-                'len' => array(
-                    'name' => 'len',
-                    'type' => 'guint',
+                'parameters' => Array(
+                    'hash_func' => Array(
+                        'name' => 'hash_func',
+                        'type' => 'GHashFunc',
+                    ),
+                    'key_equal_func' => Array(
+                        'name' => 'key_equal_func',
+                        'type' => 'GEqualFunc',
+                    )
                 ),
             )
         )

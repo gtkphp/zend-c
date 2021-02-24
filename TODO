@@ -1,2 +1,18 @@
-grammar.y
-add NOT_ASSIGN in assignment_operator( a ~= 0x01)
+
++ ----------------------------------------------- +
++ Assume modifier instead of type='unsigned int'  +
++ ----------------------------------------------- +
+Example:
+name=>'guint'
+'type'=>Builtin(
+  'name'=>'int',
+  'modifier'=>'unsigned',
+)
+
+Example:
+name=>'gconstpointer'
+'type'=>Builtin(
+  'name'=>'void',
+  'qualifier'=>'const',
+  'pass'=>'*',
+)
