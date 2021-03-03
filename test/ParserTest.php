@@ -55,8 +55,12 @@ class ParserTest extends TestCase {
     }
 
     public function testMacroParser() {
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-alloca.h');
+        $this->parser->parse($tokens, $this->context);
+
         $data_filename = __DIR__.'/data/macro-alloca.h';
         $tokens = $this->preprocessor->process($data_filename);
+        var_dump($tokens);
         //$ast = $this->parser->parse($tokens, $this->context);
 
         /*$types = $this->parser->getTypes();

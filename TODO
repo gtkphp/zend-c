@@ -16,3 +16,8 @@ name=>'gconstpointer'
   'qualifier'=>'const',
   'pass'=>'*',
 )
+
++ ----------------------------------------------- +
++ Resolve type on demand                          +
++ ----------------------------------------------- +
+<src>/lib/Compiler.php
