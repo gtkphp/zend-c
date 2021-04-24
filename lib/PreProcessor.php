@@ -19,6 +19,9 @@ class PreProcessor {
         $this->parser = $parser ?? new Parser;
         $this->context = $context;
     }
+    function getDefinitions() {
+        return $this->context->getDefines();
+    }
 
     public function process(string $header): array {
         if (empty($header)) {
