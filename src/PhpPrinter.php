@@ -170,9 +170,15 @@ class PhpPrinter
             $array['type']=$node->name;
         } else if ($node instanceof Type\ArrayType\ConstantArrayType) {
             $array['type']='array';
-            $array['value']=array(
-                'type'=>$node->parent->name,
-            );
+            if ($node->parent instanceof Type\PointerType) {
+                $value = array();
+                $this->printType($node->parent, $value);
+                $array['value'] = $value;
+            } else {
+                $array['value']=array(
+                    'type'=>$node->parent->name,
+                );
+            }
             // TODO: $this->printExpr($node->size);
             $array['size']=$node->size->value;// $this->printExpr($type->size)
             //$array['modifier']='unsigned';
@@ -222,6 +228,8 @@ class PhpPrinter
                     $this->printType($parent->parent, $array);
                 } elseif (isset($parent->name)) {//Node\Type\BuiltinType
                     $array['type']= $parent->name;
+                } else if ($parent instanceof Type\AttributedType) {// parent == Node\Type\TagType\RecordType
+                    $this->printType($parent, $array);
                 } else if (True) {// parent == Node\Type\TagType\RecordType
                     $array['type']= $parent->decl->name;
                 }
