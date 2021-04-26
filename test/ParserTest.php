@@ -171,6 +171,20 @@ class ParserTest extends TestCase {
         $this->assertTrue(True);
     }
 
+    public function testFunctionParser() {
+
+        $data_filename = __DIR__.'/data/func-GObject.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        $ast = $this->parser->parse($tokens, $this->context);
+
+        $printer = new PhpPrinter;
+        $printer->print($ast, $actual);
+        print_r($actual);
+
+        $this->assertTrue(True);
+    }
+    
+
     public function enumProvider():array
     {
         return [

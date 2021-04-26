@@ -257,6 +257,17 @@ class PhpPrinter
                 'return'=>$return,
                 'parameters'=>$parameters
             );
+        } else if ($node instanceof Type\ArrayType\IncompleteArrayType) {
+            $array['type']='array';
+            if ($node->parent instanceof Type\PointerType) {
+                $value = array();
+                $this->printType($node->parent, $value);
+                $array['value'] = $value;
+            } else {
+                $array['value']=array(
+                    'type'=>$node->parent->name,
+                );
+            }
         } else {
             echo get_class($node)."\n";
             echo "Error 55: Not implemented\n";
