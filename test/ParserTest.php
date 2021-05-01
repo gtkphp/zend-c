@@ -32,6 +32,27 @@ class ParserTest extends TestCase {
         //$tokens = $this->preprocessor->process(__DIR__ . '/../data/config.h');
         //$this->parser->parse($tokens, $this->context);
     }
+    
+    public function testMultiTypedefParser() {
+        //$tokens = $this->preprocessor->process('/home/dev/Projets/zend-ext/data/config-glib.h');
+        //$this->parser->parse($tokens, $this->context);
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GDestroyNotify.h');
+        $this->parser->parse($tokens, $this->context);
+
+        $tokens = $this->preprocessor->process(__DIR__ . '/data/struct-MotifWmHints.h');
+        $this->parser->parse($tokens, $this->context);
+
+        $types = $this->parser->getTypes();
+        $keys = array_keys($types);
+        print_r($keys);
+
+        /*
+        $expected = include __DIR__.'/expect/typedef-gboolean.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        */
+        $this->assertTrue(True);
+    }
 
     public function testTypedefParser() {
         //$tokens = $this->preprocessor->process(__DIR__ . '/data/config-gboolean.h');
