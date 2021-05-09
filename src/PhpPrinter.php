@@ -156,6 +156,7 @@ class PhpPrinter
         $array['name'] = ''.$decl->name;
         $array['type'] = 'union';
         $members = array();
+        if(is_array($decl->fields))
         foreach ($decl->fields as $field) {
             $member  = array('name'=>$field->name);
             $this->printType($field->type, $member);
@@ -263,7 +264,17 @@ class PhpPrinter
                 $value = array();
                 $this->printType($node->parent, $value);
                 $array['value'] = $value;
+            } else if ($node->parent instanceof Type\AttributedType) {
+                if ($node->parent->parent instanceof Type\PointerType) {
+                    $value = array();
+                    $this->printType($node->parent->parent, $value);
+                    $array['size']=-1;
+                    $array['value']=$value;
+                } else {
+                    var_dump($node);
+                }
             } else {
+                //var_dump($node);
                 $array['value']=array(
                     'type'=>$node->parent->name,
                 );
