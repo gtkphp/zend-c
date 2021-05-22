@@ -252,7 +252,7 @@ class PhpPrinter
                 $parameters[$name_param]=$parameter;
             }
             if ($node->isVariadic) {
-                $parameters[]='...';
+                $parameters['...']=array('type'=>'...');
             }
             $array['signature']= array(
                 'return'=>$return,
