@@ -238,6 +238,13 @@ class PhpPrinter
             $array['pass']= $pass;
         } else if ($node instanceof Type\AttributedType) {
             $this->printType($node->parent, $array);
+            if (isset($node->kind)) {
+                switch ($node->kind) {
+                    case Type\AttributedType::KIND_CONST:
+                        $array['qualifier']= 'const';
+                        break;
+                }
+            }
         } elseif ($node instanceof Type\FunctionType\FunctionProtoType) {
             $array['type']= 'function';
             $return=array();
