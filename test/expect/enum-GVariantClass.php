@@ -3,12 +3,12 @@
 return array(
     'typedefs'=>array(
         'GVariantClass'=>array(
-            'name'=>'',
+            'name'=>'#GVariantClass',
             'type'=>'enum'
         )
     ),
     'enums'=>array(
-        'GVariantClass'=>array(
+        '#GVariantClass'=>array(
             'name' => '',
             'type' => 'enum',
             'constants' => Array
@@ -25,6 +25,8 @@ return array(
                 ),
             )
         )
-    )
+    ),
+    'structs'=>[],
+    'unions'=>[],
 );
 

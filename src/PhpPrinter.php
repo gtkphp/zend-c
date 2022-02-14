@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Zend\C;
 
+use TypedefInfo;
 use Zend\C\Engine\Node;
 use Zend\C\Engine\Node\Decl;
 use Zend\C\Engine\Node\Decl\NamedDecl\TypeDecl\TagDecl\EnumDecl;
@@ -14,13 +15,20 @@ use Zend\C\Engine\Printer;
 
 class PhpPrinter
 {
+    public $declarations=[];
     protected $level=0;
+
     function print(TranslationUnitDecl $node, array &$array=Null) {
+        //print_r($node);
         if(!isset($array)) $array = array();
+        //if(!isset($array['builtins'])) $array['builtins'] = array('void'=>0, 'short'=>0, 'long'=>0, 'char'=>0, 'int'=>0, 'float'=>0, 'double'=>0, 'array'=>0, 'struct'=>0, 'enum'=>0, 'union'=>0);
         if(!isset($array['typedefs'])) $array['typedefs'] = array();
         if(!isset($array['enums']))    $array['enums'] = array();
         if(!isset($array['structs']))  $array['structs'] = array();
         if(!isset($array['unions']))   $array['unions'] = array();
+        if(!isset($array['user_function']))   $array['user_function'] = array();// prototypes
+        if(!isset($array['macros']))   $array['macros'] = array();
+        $this->declarations = $node->declarations;
         $this->printNode($node, $array);
     }
     function printNode(Node $node, array &$array) {
@@ -54,23 +62,42 @@ class PhpPrinter
     protected function printDecl(Decl $node, array &$array) {
         $this->level++;
         if ($node instanceof Decl\NamedDecl\TypeDecl\TypedefNameDecl\TypedefDecl) {
+            //$info = new TypedefInfo();
             $typedef = array('name'=>$node->name);
             $this->printType($node->type, $typedef);
+
+            $name = $node->name;
+            if (isset($node->type->decl)) {// $node->type instanceof Type\BuiltinType
+                $name = $node->type->decl->name;
+                if (empty($name)) {
+                    $name = '#'.$node->name;// anonymous
+                }
+            }
+
             switch($typedef['type']) {
                 case 'enum':
-                    $array['typedefs'][$node->name] = array('name'=>$typedef['name'], 'type'=>$typedef['type']);
-                    $array['enums'][$node->name] = $typedef;
+                    $array['typedefs'][$node->name] = array('name'=>$name/*$typedef['name']*/, 'type'=>$typedef['type']);
+                    if (isset($node->type->decl->fields)) {
+                        $array['enums'][$name] = $typedef;
+                    }
                     break;
                 case 'union':
-                    $array['typedefs'][$node->name] = array('name'=>$typedef['name'], 'type'=>$typedef['type']);
-                    $array['unions'][$node->name] = $typedef;
+                    $array['typedefs'][$node->name] = array('name'=>$name/*$typedef['name']*/, 'type'=>$typedef['type']);
+                    if (isset($node->type->decl->fields)) {
+                        $array['unions'][$name/*$node->type->decl->name*/] = $typedef;
+                    }
                     break;
                 case 'struct':
-                    $array['typedefs'][$node->name] = array('name'=>$typedef['name'], 'type'=>$typedef['type']);
-                    $array['structs'][$node->name] = $typedef;
+                    $array['typedefs'][$node->name] = array('name'=>$name/*$typedef['name']*/, 'type'=>$typedef['type']);
+                    if (isset($node->type->decl->fields)) {
+                        $array['structs'][$name/*$node->type->decl->name*/] = $typedef;
+                    }
+                    break;
+                case 'function':
+                    $array['user_function'][$name/*$node->name*/] = $typedef;
                     break;
                 default:
-                    $array['typedefs'][$node->name] = $typedef;
+                    $array['typedefs'][$name/*$node->name*/] = $typedef;
                     break;
             }
         } else  if ($node instanceof RecordDecl) {
@@ -99,7 +126,8 @@ class PhpPrinter
             } else {
                 $enum = array('name'=>$node->name);
                 $this->printEnum($node, $enum);
-                $array['unions'][$node->name] = $enum;
+                $array['enums'][$node->name] = $enum;
+                //$array['unions'][$node->name] = $enum;
             }
         } else if ($node instanceof Decl\NamedDecl\ValueDecl\DeclaratorDecl\FunctionDecl) {
             if ($this->level>1) {
@@ -136,6 +164,7 @@ class PhpPrinter
         $array['name'] = ''.$decl->name;
         $array['type'] = 'enum';
         $constants = array();
+        if (!empty($decl->fields))
         foreach ($decl->fields as $field) {
             $constant = array('name'=>$field->name, 'expression'=>Null, 'value'=>Null);
             if (isset($field->value)) {
@@ -156,7 +185,7 @@ class PhpPrinter
         $array['name'] = ''.$decl->name;
         $array['type'] = 'union';
         $members = array();
-        if(is_array($decl->fields))
+        if (!empty($decl->fields))
         foreach ($decl->fields as $field) {
             $member  = array('name'=>$field->name);
             $this->printType($field->type, $member);

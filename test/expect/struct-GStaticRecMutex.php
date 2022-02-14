@@ -1,6 +1,8 @@
 <?php
 /* $printer->array['structs'] = */
 return array(
+    'typedefs'=>[],
+    'enums'=>[],
     'structs'=>array(
         '_GStaticRecMutex'=>array(
             'name' => '_GStaticRecMutex',
@@ -13,7 +15,7 @@ return array(
                 ),
                 'depth' => array(
                     'name' => 'depth',
-                    'type' => 'int',
+                    'type' => 'guint',
                 ),
                 'unused' => array(
                     'name' => '',
@@ -31,5 +33,6 @@ return array(
                 )
             )
         )
-    )
+    ),
+    'unions'=>[],
 );

@@ -1410,7 +1410,8 @@ class ExpressionParser extends ParserAbstract
                 /*var_dump($this->semStack);
                 var_dump($stackPos);
                 var_dump($stackPos-(3-1));*/
-                $this->semValue = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_201*/
+                //$this->semValue = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$stackPos-(3-1)], $this->startAttributeStack[$stackPos-(3-1)] + $this->endAttributes);/*LABEL_201*/
+                $this->semValue = new IR\DirectAbstractDeclarator\AbstractDeclarator($this->semStack[$stackPos-(3-2)], $this->startAttributeStack[$stackPos-(3-2)] + $this->endAttributes);/*LABEL_201*/
             },
             206 => function ($stackPos) {
                 $this->semValue = new IR\DirectAbstractDeclarator\IncompleteArray($this->startAttributeStack[$stackPos-(2-1)] + $this->endAttributes);/*LABEL_202*/

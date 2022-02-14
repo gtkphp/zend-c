@@ -1,9 +1,30 @@
 <?php
 
 return array(
-    'typedefs'=>array(),
+    'typedefs'=>array(
+        'GBookmarkFileError' => array(
+            'name' => '#GBookmarkFileError',
+            'type' => 'enum'
+        ),
+        'GDateDMY' => array(
+            'name' => '#GDateDMY',
+            'type' => 'enum'
+        ),
+        'GFileTest' => array(
+            'name' => '#GFileTest',
+            'type' => 'enum'
+        ),
+        'GIOChannelError' => array(
+            'name' => '#GIOChannelError',
+            'type' => 'enum'
+        ),
+        'GIOFlags' => array(
+            'name' => '#GIOFlags',
+            'type' => 'enum'
+        ),
+    ),
     'enums'=>array(
-        'GBookmarkFileError'=>array(
+        '#GBookmarkFileError'=>array(
             'name' => '',
             'type' => 'enum',
             'constants' => Array
@@ -50,7 +71,7 @@ return array(
                 ),
             )
         ),
-        'GDateDMY'=>array(
+        '#GDateDMY'=>array(
             'name'=>'',
             'type'=>'enum',
             'constants'=>array(
@@ -71,7 +92,7 @@ return array(
                 ),
             )
         ),
-        'GFileTest'=>array(
+        '#GFileTest'=>array(
             'name'=>'',
             'type'=>'enum',
             'constants'=>array(
@@ -102,7 +123,7 @@ return array(
                 ),
             )
         ),
-        'GIOChannelError'=>array(
+        '#GIOChannelError'=>array(
             'name'=>'',
             'type'=>'enum',
             'constants'=>array(
@@ -153,7 +174,7 @@ return array(
                 ),
             )
         ),
-        'GIOFlags'=>array(
+        '#GIOFlags'=>array(
             'name'=>'',
             'type'=>'enum',
             'constants'=>array(
@@ -204,5 +225,7 @@ return array(
                 ),
             )
         ),
-    )
+    ),
+    'structs'=>array(),
+    'unions'=>array(),
 );

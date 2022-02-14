@@ -16,3 +16,5 @@ typedef struct
 } GStaticMutex;
 
 typedef unsigned long int pthread_t;
+
+//#define G_OS_WIN32 1 platform dependant

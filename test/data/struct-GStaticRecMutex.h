@@ -1,10 +1,11 @@
+
 struct _GStaticRecMutex
 {
   /*< private >*/
   GStaticMutex mutex;
-  int depth;
+  guint depth;
 
-  /* ABI compat only */
+  /* ABI compat only*/
   union {
 #ifdef G_OS_WIN32
     void *owner;

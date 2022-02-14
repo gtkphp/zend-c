@@ -18,7 +18,9 @@ use Zend\C\ExpressionParser;
 use PHPUnit\Framework\TestCase;
 
 /**
- *
+ * @TODO 'functions'=>array(...)
+ *  testFunctionParser
+ *  testFunctionDeclParser
  */
 class ParserTest extends TestCase {
 
@@ -75,13 +77,42 @@ class ParserTest extends TestCase {
         $this->assertTrue(True);
     }
 
+    public function testTypeParser() {
+        //$tokens = $this->preprocessor->process(__DIR__ . '/data/config-gboolean.h');
+        ///$tokens = $this->preprocessor->process(__DIR__ . '/data/config-GDestroyNotify.h');
+        ///$this->parser->parse($tokens, $this->context);
+
+        $data_filename = __DIR__.'/data/typedef-guint.h';
+        $tokens = $this->preprocessor->process($data_filename);
+        //print_r($tokens);
+        $ast = $this->parser->parse($tokens, $this->context);
+        print_r($ast);
+
+        /*$types = $this->parser->getTypes();
+        $keys = array_keys($types);
+        print_r($keys);*/
+
+        /*
+        $expected = include __DIR__.'/expect/typedef-gboolean.php';
+        $this->assertEquals($expected, $actual);
+        $this->assertTrue($expected===$actual);
+        */
+        $this->assertTrue(True);
+    }
+
     public function testMacroParser() {
         $tokens = $this->preprocessor->process(__DIR__ . '/data/config-alloca.h');
-        $this->parser->parse($tokens, $this->context);
+        //echo PHP_EOL, "\e[31;4m", 'void __builtin_alloca(int size);', "\e[0m", PHP_EOL;
+        //print_r($tokens);
+        $ast = $this->parser->parse($tokens, $this->context);
+        //var_dump($ast);
 
         $data_filename = __DIR__.'/data/macro-alloca.h';
         $tokens = $this->preprocessor->process($data_filename);
-        var_dump($tokens);
+        //echo PHP_EOL, "\e[31;4m", '#define alloca(size)   __builtin_alloca (size)', "\e[0m", PHP_EOL;
+        //var_dump($tokens);
+        //$defines = $this->preprocessor->getDefinitions();
+        //print_r($defines);
         //$ast = $this->parser->parse($tokens, $this->context);
 
         /*$types = $this->parser->getTypes();
@@ -111,7 +142,7 @@ class ParserTest extends TestCase {
         $actual = array();
         $printer->print($ast, $actual);
 
-        print_r($actual);
+        //print_r($actual);
 
         /*
         $expected = include __DIR__.'/expect/union-GMutex.php';
@@ -170,13 +201,13 @@ class ParserTest extends TestCase {
         $expected = include __DIR__.'/expect/struct-GStaticRecMutex.php';
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected===$actual);
+
         /*
         $actual = $printer->evaluate();
         */
 
         $this->assertTrue(True);
     }
-
     public function testFunctionDeclParser() {
         $tokens = $this->preprocessor->process(__DIR__ . '/data/config-GHashTable.h');
         $this->parser->parse($tokens, $this->context);
@@ -214,11 +245,6 @@ class ParserTest extends TestCase {
     public function enumProvider():array
     {
         return [
-#            ['enum', 'GBookmarkFileError'],
-#            ['enum', 'GDateDMY'],
-#            ['enum', 'GFileTest'],
-#            ['enum', 'GIOChannelError'],
-#            ['enum', 'GIOFlags'],
 #            ['enum', 'GIOCondition']
 #            ['enum', 'GLogLevelFlags']
 #            ['enum', 'GTokenType']
@@ -235,13 +261,14 @@ class ParserTest extends TestCase {
         $data_filename = __DIR__.'/data/'.$type.'-'.$name.'.h';
         $tokens = $this->preprocessor->process($data_filename);
         $ast = $this->parser->parse($tokens, $this->context);
+        //print_r($ast);
 
 
         $printer->print($ast, $actual);
+        //print_r($actual);
         $printer->evaluate($actual);
 
         $expected = include __DIR__.'/expect/'.$type.'-'.$name.'.php';
-        //print_r($actual);
         //print_r($expected);
 
         $this->assertEquals($expected, $actual);
@@ -275,8 +302,8 @@ class ParserTest extends TestCase {
 
         $expected = include __DIR__.'/expect/eval-enums.php';
         $printer->evaluate($actual);
-        $actual['typedefs'] = array();
         //print_r($actual);
+        //print_r($expected);
 
         $this->assertEquals($expected, $actual);
         $this->assertTrue($expected===$actual);
