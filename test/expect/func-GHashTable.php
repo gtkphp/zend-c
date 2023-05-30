@@ -1,6 +1,12 @@
 <?php
 
 return array(
+    'typedefs' => [],
+    'enums' => [],
+    'structs' => [],
+    'unions' => [],
+    'user_function' => [],
+    'macros' => [],
     'functions' => Array(
         'g_hash_table_new' => Array(
             'name' => 'g_hash_table_new',

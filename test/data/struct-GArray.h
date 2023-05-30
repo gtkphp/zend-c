@@ -1,3 +1,4 @@
+
 struct _GArray
 {
   gchar *data;

@@ -1,6 +1,9 @@
 <?php
-/* $printer->array['structs'] = */
+
 return array(
+    'typedefs'=>[],
+    'enums'=>[],
+    'structs' => [],
     'unions'=>array(
         '_GMutex'=>array(
             'name' => '_GMutex',
@@ -21,5 +24,7 @@ return array(
                 ),
             )
         )
-    )
+    ),
+    'user_function'=>[],
+    'macros'=>[],
 );

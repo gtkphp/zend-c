@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Zend\C\Engine\PreProcessor;
 
+use Exception;
+
 class Token {
     const IDENTIFIER = 1;
     const NUMBER = 2;

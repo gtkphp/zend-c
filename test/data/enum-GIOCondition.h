@@ -1,3 +1,10 @@
+#define GLIB_SYSDEF_POLLIN =1
+#define GLIB_SYSDEF_POLLOUT =4
+#define GLIB_SYSDEF_POLLPRI =2
+#define GLIB_SYSDEF_POLLHUP =16
+#define GLIB_SYSDEF_POLLERR =8
+#define GLIB_SYSDEF_POLLNVAL =32
+
 typedef enum /*< flags >*/
 {
   G_IO_IN	GLIB_SYSDEF_POLLIN,

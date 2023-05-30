@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace Zend\C;
 
+require_once (__DIR__.'/gint.php');
+
+use Exception;
 use TypedefInfo;
 use Zend\C\Engine\Node;
 use Zend\C\Engine\Node\Decl;
@@ -19,7 +22,6 @@ class PhpPrinter
     protected $level=0;
 
     function print(TranslationUnitDecl $node, array &$array=Null) {
-        //print_r($node);
         if(!isset($array)) $array = array();
         //if(!isset($array['builtins'])) $array['builtins'] = array('void'=>0, 'short'=>0, 'long'=>0, 'char'=>0, 'int'=>0, 'float'=>0, 'double'=>0, 'array'=>0, 'struct'=>0, 'enum'=>0, 'union'=>0);
         if(!isset($array['typedefs'])) $array['typedefs'] = array();
@@ -63,6 +65,7 @@ class PhpPrinter
         $this->level++;
         if ($node instanceof Decl\NamedDecl\TypeDecl\TypedefNameDecl\TypedefDecl) {
             //$info = new TypedefInfo();
+
             $typedef = array('name'=>$node->name);
             $this->printType($node->type, $typedef);
 
@@ -80,17 +83,37 @@ class PhpPrinter
                     if (isset($node->type->decl->fields)) {
                         $array['enums'][$name] = $typedef;
                     }
+                    /*if (isset($typedef['kind'])) {
+                        $s_name = $typedef['kind']['name'];
+                        if (empty($array['enums'][$s_name])) {
+                            $array['typedefs'][$node->name]['name'] = $s_name;
+                            $array['enums'][$s_name] = $typedef['kind'];
+                        }
+                    }*/
                     break;
                 case 'union':
                     $array['typedefs'][$node->name] = array('name'=>$name/*$typedef['name']*/, 'type'=>$typedef['type']);
                     if (isset($node->type->decl->fields)) {
                         $array['unions'][$name/*$node->type->decl->name*/] = $typedef;
                     }
+                    /*Not supported : typedef union _Foo Foo;
+                    if (isset($typedef['kind'])) {
+                        $array['typedefs'][$node->name]['name'] = $typedef['kind']['name'];
+                        $array['unions'][$typedef['kind']['name']] = $typedef['kind'];
+                    }*/
                     break;
                 case 'struct':
                     $array['typedefs'][$node->name] = array('name'=>$name/*$typedef['name']*/, 'type'=>$typedef['type']);
                     if (isset($node->type->decl->fields)) {
                         $array['structs'][$name/*$node->type->decl->name*/] = $typedef;
+                    }
+                    if (isset($typedef['kind'])) {
+                        $s_name = $typedef['kind']['name'];
+                        if (empty($array['structs'][$s_name])) {
+                            $array['typedefs'][$node->name]['name'] = $s_name;
+                            if (isset($typedef['pass'])) $array['typedefs'][$node->name]['pass'] = $typedef['pass'];
+                            $array['structs'][$s_name] = $typedef['kind'];
+                        }
                     }
                     break;
                 case 'function':
@@ -216,8 +239,10 @@ class PhpPrinter
             //$array['qualifier']= 'const';
         } else if ($node instanceof Type\TagType\RecordType) {
             $this->printDecl($node->decl, $array);
+            $array['kind'] = array('name'=>$array['name'], 'type'=>$array['type']);
         } else if ($node instanceof Type\TagType\EnumType) {
             $this->printDecl($node->decl, $array);
+            //$array['kind'] = array('name'=>$array['name'], 'type'=>$array['type']);
         } else if ($node instanceof Type\PointerType) {
             $parent = $node;
             //var_dump($node);
@@ -230,6 +255,7 @@ class PhpPrinter
                     break;
                 }
             }
+
             if ($parent instanceof Type\FunctionType\FunctionProtoType) {
                 $this->printType($parent, $array);
                 /*
@@ -256,6 +282,11 @@ class PhpPrinter
             } else {
                 if($parent instanceof Type\ParenType) {
                     $this->printType($parent->parent, $array);
+                } elseif ($parent instanceof Type\TagType\RecordType) {
+                    $foo = [];
+                    $this->printDecl($parent->decl, $foo);
+                    $array['type']= $foo['type'];
+                    $array['kind']= $foo;
                 } elseif (isset($parent->name)) {//Node\Type\BuiltinType
                     $array['type']= $parent->name;
                 } else if ($parent instanceof Type\AttributedType) {// parent == Node\Type\TagType\RecordType
@@ -424,25 +455,29 @@ class PhpPrinter
         if (isset($array['enums']))
         foreach($array['enums'] as $name => $enum) {
             $count = -1;
-            foreach($enum['constants'] as $key=>$constant) {
-                //var_export($constant['value']);
-                if (is_integer($constant['value'])) {
-                    $value = $constant['value'];
-                    $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
-                    $count = $value;
-                } else if (is_numeric($constant['expression'])) {
-                    $count = intval($constant['expression']);
-                    $array['enums'][$name]['constants'][$key]['value']=$count;
-                    $this->script .= "!defined('$key') ? define('$key', $count) : null;\n";
-                } else if (empty($constant['expression'])) {
-                    $value = ++$count;
-                    $array['enums'][$name]['constants'][$key]['value']=$value;
-                    $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
-                } else if(strlen($constant['expression'])==1 && ctype_print($constant['expression'])){
-                    $value = ord($constant['expression']);
-                    $array['enums'][$name]['constants'][$key]['value']=$value;
-                    $count = $value;
+            if (isset($enum['constants'])) {
+                foreach($enum['constants'] as $key=>$constant) {
+                    //var_export($constant['value']);
+                    if (is_integer($constant['value'])) {
+                        $value = $constant['value'];
+                        $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
+                        $count = $value;
+                    } else if (is_numeric($constant['expression'])) {
+                        $count = intval($constant['expression']);
+                        $array['enums'][$name]['constants'][$key]['value']=$count;
+                        $this->script .= "!defined('$key') ? define('$key', $count) : null;\n";
+                    } else if (empty($constant['expression'])) {
+                        $value = ++$count;
+                        $array['enums'][$name]['constants'][$key]['value']=$value;
+                        $this->script .= "!defined('$key') ? define('$key', $value) : null;\n";
+                    } else if(strlen($constant['expression'])==1 && ctype_print($constant['expression'])){
+                        $value = ord($constant['expression']);
+                        $array['enums'][$name]['constants'][$key]['value']=$value;
+                        $count = $value;
+                    }
                 }
+            } else {
+                echo "Error enum '$name' dot not have ENUMERATION\n";
             }
         }
 
@@ -451,17 +486,26 @@ class PhpPrinter
         foreach($array['enums'] as $name => $enum) {
             foreach($enum['constants'] as $key=>$constant) {
                 if (!isset($constant['value'])) {
-                    $script = $this->script . 'return '.$constant['expression'].';';
-                    //echo 'First loop'.PHP_EOL;
-                    /*try {
+// "(1u << 0),", "(gint)(1u << 31) => gint(1u << 31)"
+$expression = str_replace("1u << ", "1 << ", $constant['expression']);
+
+                    $script = $this->script . 'return '.$expression.';';
+                    try {
                         $value = eval($script);
-                    } catch (Error $exc) {
-                        remains (si une constante est defini après... ordre de définition des enum
-                    }*/
+                        $val = intval($value);
+                        $array['enums'][$name]['constants'][$key]['value']= $val;
+                        $this->script .= "!defined('$key') ? define('$key', $val) : null;\n";
+
+                    } catch (ParseError $exc) {
+echo $name, PHP_EOL;
+                    }
+//echo $script, PHP_EOL;
+			/*
                     $value = eval($script);
                     $val = intval($value);
                     $array['enums'][$name]['constants'][$key]['value']= $val;
                     $this->script .= "!defined('$key') ? define('$key', $val) : null;\n";
+			*/
                 }
             }
         }

@@ -1,3 +1,4 @@
+
 struct _GIOFuncs
 {
   GIOStatus (*io_read)           (GIOChannel   *channel,

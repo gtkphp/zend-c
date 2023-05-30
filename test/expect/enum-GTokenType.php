@@ -3,12 +3,12 @@
 return array(
     'typedefs'=>array(
         'GTokenType' => array(
-            'name' => '',
+            'name' => '#GTokenType',
             'type' => 'enum',
         )
     ),
     'enums'=>array(
-        'GTokenType' => array(
+        '#GTokenType' => array(
             'name' => '',
             'type' => 'enum',
             'constants' => Array
@@ -135,5 +135,9 @@ return array(
                 ),
             )
         )
-    )
+    ),
+    'structs'=>[],
+    'unions'=>[],
+    'user_function'=>[],
+    'macros'=>[],
 );

@@ -1,5 +1,5 @@
 <?php
-/* $printer->array['structs'] = */
+
 return array(
     'typedefs'=>[],
     'enums'=>[],
@@ -35,4 +35,6 @@ return array(
         )
     ),
     'unions'=>[],
+    'user_function'=>[],
+    'macros'=>[],
 );

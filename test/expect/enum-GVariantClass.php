@@ -28,5 +28,7 @@ return array(
     ),
     'structs'=>[],
     'unions'=>[],
+    'user_function'=>[],
+    'macros'=>[],
 );
 

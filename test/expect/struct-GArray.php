@@ -22,4 +22,6 @@ return array(
         )
     ),
     'unions'=>[],
+    'user_function'=>[],
+    'macros'=>[],
 );

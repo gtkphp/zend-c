@@ -1,8 +1,9 @@
 <?php
 
 
-/* $printer->array['structs'] = */
 return array(
+    'typedefs'=>[],
+    'enums'=>[],
     'structs' => array(
         '_GIOFuncs' => array(
             'name' => '_GIOFuncs',
@@ -47,6 +48,9 @@ return array(
                 ),
             )
         )
-    )
+    ),
+    'unions'=>[],
+    'user_function'=>[],
+    'macros'=>[],
 );
 

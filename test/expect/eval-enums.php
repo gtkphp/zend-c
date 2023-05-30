@@ -228,4 +228,6 @@ return array(
     ),
     'structs'=>array(),
     'unions'=>array(),
+    'user_function'=>[],
+    'macros'=>[],
 );
